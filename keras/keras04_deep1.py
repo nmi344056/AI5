@@ -1,0 +1,46 @@
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+import numpy as np
+
+#1. 데이터
+x = np.array([1,2,3,4,5])
+y = np.array([1,2,3,4,5])
+
+"""
+[실습]
+레이어의 깊이와 노드의 갯수를 이용해서 [6]을 만들기
+epochs는 100으로 고정
+소수 네째자리까지 맞추면 합격, 예 : 6.0000 또는 5.9999
+"""
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(3, input_dim=1))
+model.add(Dense(4, input_dim=3))
+model.add(Dense(5, input_dim=4))
+model.add(Dense(5, input_dim=5))
+model.add(Dense(1, input_dim=5))
+
+epochs = 100
+#3. 컴파일 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x, y, epochs=epochs)
+
+#4. 평가, 예측
+loss = model.evaluate(x, y)
+print("====================")
+print("layer : 4, node : ")
+print("로스 : ", loss)
+result = model.predict([6])
+print("6의 예측값 : ", result)
+
+"""
+5. 결과값 기록
+layer : 5, node : 3 4 5 4 1
+로스 :  1.4377397405951342e-07
+6의 예측값 :  [[6.0005965]]
+====================
+layer : 4, node : 3 4 3 1
+로스 :  2.49858771894651e-06
+6의 예측값 :  [[5.9993324]]
+"""
