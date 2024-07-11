@@ -22,7 +22,7 @@ model.add(Dense(1, input_dim =3))
 #3. 컴파일, 훈련
 epochs = 100
 model.compile(loss='mse', optimizer='adam')
-model.fit(x, y, epochs = epochs)
+model.fit(x, y, epochs = epochs, batch_size=2)
 
 #4. 평가, 예측
 loss = model.evaluate(x, y)
@@ -34,4 +34,4 @@ print("7의 예측값 : ", result)
 
 # epochs =  2000
 # 로스 :  0.3284194767475128
-# 7의 예측값 :  [[6.6936216]]
+# 7의 예측값 :  [[6.6936216]]  
