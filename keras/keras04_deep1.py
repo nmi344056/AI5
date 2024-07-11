@@ -27,7 +27,9 @@ model.add(Dense(30, input_dim=50))
 model.add(Dense(12, input_dim=30))
 model.add(Dense(1, input_dim=12))
 
-
+# epochs =  100
+# 로스 :  0.0001827188243623823
+# 6의 예측값 :  [[5.969383]]
 
 #3. 컴파일, 훈련
 epochs = 100
