@@ -8,8 +8,9 @@ y = np.array([1,2,3,5,4,6])
 
 """
 [실습]
-레이어의 깊이와 노드의 갯수를 이용해서 최소의 loss를 만들기
-epochs는 100으로 고정
+keras04의 가장 좋은 레이어와 노드를 이용하여 최소의 loss를 만들기
+batch_size 조절
+epochs 변경 가능
 loss 기준 0.32 미만
 """
 
@@ -25,7 +26,7 @@ model.add(Dense(1))
 epochs = 100
 #3. 컴파일 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x, y, epochs=epochs)
+model.fit(x, y, epochs=epochs, batch_size=25)
 
 #4. 평가, 예측
 loss = model.evaluate(x, y)
@@ -36,7 +37,7 @@ print("6의 예측값 : ", result)
 
 """
 5. 결과값 기록
-3 100 50 100 50 1
-로스 :  0.3238506615161896
-6의 예측값 :  [[5.865899]]
+10 25
+로스 :  0.323942095041275
+6의 예측값 :  [[5.850293]]
 """
