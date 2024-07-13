@@ -43,28 +43,34 @@ print(np.min(x_train), np.max(x_train))     # 0.0 1.0
 print(np.min(x_test), np.max(x_test))       # -0.06211435623200334 1.0280851063829786 (StandardScaler)
 
 # 2. 모델구성
-# model = Sequential()
-# model.add(Dense(10, input_shape=(13,)))
-# model.add(Dense(5))
-# model.add(Dense(1))
+model = Sequential()
+model.add(Dense(10, input_shape=(13,)))
+model.add(Dense(5))
+model.add(Dense(1))
 
 # model.save("./_save/keras28/keras28_1_save_model.h5")
-# model = load_model("./_save/keras28/keras28_1_save_model.h5")     # 상대경로
-model = load_model("c:/ai5/_save/keras28/keras28_1_save_model.h5")  # 절대경로
+# model = load_model("./_save/keras28/keras28_5_save_model.h5")
+model.load_weights("./_save/keras28/keras28_5_save_weight2.h5")
 
 model.summary()
 
-#3. 컴파일, 훈련
+# #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-start = time.time()
-hist = model.fit(x_train, y_train, epochs=10, batch_size=10, validation_split=0.2)
-end = time.time()
+# start = time.time()
+# hist = model.fit(x_train, y_train, epochs=10, batch_size=10, validation_split=0.2)
+# end = time.time()
 
-#4. 평가, 예측
+# 4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
 print("loss : ", loss)
 
 y_predict = model.predict(x_test)
 r2 = r2_score(y_test, y_predict)
 print("r2 score : ", r2)
-print("time : ", round(end - start, 2), "초")
+# # print("time : ", round(end - start, 2), "초")
+
+# '''
+# 5/5 [==============================] - 0s 500us/step - loss: 345.9454
+# loss :  345.94537353515625
+# r2 score :  -3.0172006010380485
+# '''
