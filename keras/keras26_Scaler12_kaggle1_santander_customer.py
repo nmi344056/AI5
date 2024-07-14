@@ -105,6 +105,7 @@ submission_csv.to_csv(path + "sampleSubmission_0724_1640.csv")
 
 print(submission_csv['target'].value_counts())
 
+print(x)
 '''
 MinMaxScaler / loss : 0.23171450197696686 acc : 0.91
 StandardScaler / loss : 0.240584596991539 acc : 0.91

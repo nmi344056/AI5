@@ -102,10 +102,11 @@ print(y_predict[:20])
 accuracy_score = accuracy_score(y_test, y_predict)
 print("acc score : ", accuracy_score)
 
+print(x)
 '''
 128 256 256 256 126 8 / train_size=0.9, random_state=6666 / epochs=100, batch_size=300, validation_split=0.2
 
-MinMaxScaler > 
+MinMaxScaler > sssss
 
 StandardScaler > 
 

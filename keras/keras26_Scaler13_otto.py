@@ -126,6 +126,7 @@ y_submit = np.round(y_submit)
 submission_csv[['Class_1', 'Class_2', 'Class_3', 'Class_4', 'Class_5', 'Class_6', 'Class_7', 'Class_8', 'Class_9']] = y_submit  # 변경
 submission_csv.to_csv(path + "sampleSubmission_0724_20.csv")
 
+print(x)
 '''
 246 512 1024 1024 512 256 9 / 3 / epochs=300, batch_size=600 / loss : [0.5485449433326721, 0.7887847423553467] > 5.42856
 256 126 126 126 126 1269 / 3 / epochs=500, batch_size=300 / loss : [0.5262376666069031, 0.8007434010505676] > 5.17476
