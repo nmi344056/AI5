@@ -10,7 +10,7 @@ y = np.array([1,2,4,3,5])
 model = Sequential()
 model.add(Dense(1, input_dim=1))
 
-epochs = 1000
+epochs = 2000            #튜닝
 #3. 컴파일 훈련
 model.compile(loss='mse', optimizer='adam')
 model.fit(x, y, epochs=epochs)
@@ -19,14 +19,14 @@ model.fit(x, y, epochs=epochs)
 loss = model.evaluate(x, y)
 print("====================")
 print("epochs : ",epochs)
-print("로스 : ", loss)
+print("loss : ", loss)
 result = model.predict([6])
-print("6의 예측값 : ", result)
+print("[6]의 예측값 : ", result)
 
 """
 5. 결과값 기록
 epochs :  1000
 로스 :  0.38007014989852905
-6의 예측값 :  [[5.713788]]
+[6]의 예측값 :  [[5.713788]]
 
 """

@@ -31,13 +31,13 @@ model.fit(x, y, epochs=epochs, batch_size=25)
 #4. 평가, 예측
 loss = model.evaluate(x, y)
 print("====================")
-print("로스 : ", loss)
+print("loss : ", loss)
 result = model.predict([6])
-print("6의 예측값 : ", result)
+print("[6]의 예측값 : ", result)
 
 """
 5. 결과값 기록
-10 25
-로스 :  0.323942095041275
-6의 예측값 :  [[5.850293]]
+3 10 10 10 10 1 / 25
+loss :  0.32393497228622437
+[6]의 예측값 :  [[5.871721]]
 """

@@ -16,7 +16,7 @@ loss 기준 0.32 미만
 #2. 모델구성
 model = Sequential()
 model.add(Dense(3, input_dim=1))
-model.add(Dense(100))
+model.add(Dense(100))               # input_dim 생략가능 (input=상단 layer의 output)
 model.add(Dense(50))
 model.add(Dense(100))
 model.add(Dense(50))
@@ -30,13 +30,13 @@ model.fit(x, y, epochs=epochs)
 #4. 평가, 예측
 loss = model.evaluate(x, y)
 print("====================")
-print("로스 : ", loss)
+print("loss : ", loss)
 result = model.predict([6])
-print("6의 예측값 : ", result)
+print("[6]의 예측값 : ", result)
 
 """
 5. 결과값 기록
 3 100 50 100 50 1
-로스 :  0.3238506615161896
-6의 예측값 :  [[5.865899]]
+loss :  0.3238506615161896
+[6]의 예측값 :  [[5.865899]]
 """

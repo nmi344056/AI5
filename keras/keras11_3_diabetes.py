@@ -15,7 +15,7 @@ print(x.shape, y.shape)          # (442, 10) (442,)
 
 #[실습]만들기 R2 0.62 이상
 
-random_state=999
+random_state=8000
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.79, random_state=random_state)
 
 #2. 모델구성
