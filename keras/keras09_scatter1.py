@@ -5,11 +5,11 @@ from sklearn.model_selection import train_test_split
 
 #1. 데이터
 x = np.array([1,2,3,4,5,6,7,8,9,10])
-y = np.array([1,2,3,4,5,6,7,8,9,10])
+y = np.array([1,2,3,4,7,5,7,8,6,10])
 
 #[검색] train과 test를 섞어서 7:3으로 분할 (사이킷런)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=123)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=1004)
 
 print("x_train : ", x_train)    # x_train :  [ 6  9  4  2  7 10  3]
 print("x_test : ", x_test)      # x_test :  [5 1 8]
@@ -22,12 +22,12 @@ model.add(Dense(1, input_dim=1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=1000, batch_size=1)
+model.fit(x_train, y_train, epochs=100, batch_size=1)
 
 #4. 평가, 예측
 print("++++++++++++++++++++")
-loss = model.evaluate(x_test,y_test)
-result = model.predict([11])
+loss = model.evaluate(x_test, y_test)
+result = model.predict(x)
 print("로스 : ", loss)
 print("[11] 예측값 : ", result)
 
@@ -35,3 +35,8 @@ print("[11] 예측값 : ", result)
 로스 :  0.00014058098895475268
 [11] 예측값 :  [[10.987593]]
 '''
+
+import matplotlib.pyplot as plt
+plt.scatter(x, y)
+plt.plot(x, result, color='red')
+plt.show()
