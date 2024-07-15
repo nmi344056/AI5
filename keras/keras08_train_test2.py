@@ -15,7 +15,6 @@ print(x_train)       #[1 2 3 4 5 6 7]
 # x_test = x[7:10]
 # x_test = [7:]
 x_test = x[7: ]
-x_test = x[-3:]
 print(x_test)       #[ 8  9 10]
 
 y_train = y[:7]

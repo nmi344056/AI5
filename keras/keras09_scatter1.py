@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split          # 사이킷런 추
 
 #1. 데이터
 x = np.array([1,2,3,4,5,6,7,8,9,10])
-y = np.array([1,2,3,4,5,6,7,8,9,10])
+y = np.array([1,2,3,4,7,5,7,8,6,10])
 
 # [검색] train과 test를 섞어서 7:3으로 나눠라
 # 힌트 : 사이킷런
@@ -16,7 +16,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
                                      train_size=0.7,      # 디폴트 0.75
                                     # test_size=0.4,
                                     # shuffle = True,    # 디폴트 True
-                                    #  random_state=1004,
+                                      random_state=1004,
                                     )
 
 # def aaa(a, b):
@@ -40,9 +40,14 @@ model.fit(x_train, y_train, epochs=100, batch_size=1)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
-results = model.predict([11])
+results = model.predict(x)
 print('로스 : ', loss)
 print('[11]의 예측값: ', results)
 
 # 로스 :  0.013721267692744732
 # [11]의 예측값:  [[11.155632]]
+
+import matplotlib.pyplot as plt
+plt.scatter (x, y)
+plt.plot(x, results, color='red')
+plt.show()
