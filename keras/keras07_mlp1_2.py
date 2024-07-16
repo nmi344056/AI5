@@ -10,8 +10,8 @@ x = x.T
 # x = np.array([[1,6],[2,7],[3,8],[4,9],[5,10]])
 y = np.array([1,2,3,4,5])
 
-print(x.shape)  # (5, 2)
-print(y.shape)  # (5,)
+print(x.shape)          # (5, 2)
+print(y.shape)          # (5,)
 
 #2. 모델구성
 model = Sequential()
@@ -28,12 +28,12 @@ model.fit(x,y, epochs=100, batch_size=1)
 #4. 평가, 예측
 loss = model.evaluate(x,y)
 result = model.predict([[6,11]])    # (n,2)
-print("로스 : ", loss)
+print("loss : ", loss)
 print("[6,11]의 예측값 : ", result)
 
 """
 [실습]
-소수 2째자리까지 맞추기
-로스 :  9.89786052597863e-13
-[6,11]의 예측값 :  [[6.000002]]
+소수 둘째 자리까지 맞추기
+loss :  2.478454462107038e-06
+[6,11]의 예측값 :  [[5.9963093]]
 """

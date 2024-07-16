@@ -44,7 +44,7 @@ r2 = r2_score(y_test, y_predict)
 print("r2 score : ", r2)
 
 '''
-0.8 이상
+성능 0.8 이상
 100 30 500 30 100 30 1
 random_state :  555
 loss :  21.663753509521484

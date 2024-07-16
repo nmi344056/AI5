@@ -15,10 +15,7 @@ y = np.transpose(y)
 print(x.shape)          # (10, 3)
 print(y.shape)          # (10, 2)
 
-"""
-[실습]
-x_predict = [10, 31, 211]
-"""
+# [실습] x_predict = [10, 31, 211]
 
 #2. 모델
 model = Sequential()
@@ -26,7 +23,7 @@ model.add(Dense(10, input_dim=3))
 model.add(Dense(10))
 model.add(Dense(10))
 model.add(Dense(10))
-model.add(Dense(2))
+model.add(Dense(2))     # output_dim=2
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
@@ -35,10 +32,10 @@ model.fit(x,y, epochs=100, batch_size=1)
 #4. 평가, 예측
 loss = model.evaluate(x,y)
 result = model.predict([[10, 31, 211]])
-print("로스 : ", loss)
+print("loss : ", loss)
 print("11 0 예측값 : ", result)
 
 """
-로스 :  0.16846707463264465
-11 0 예측값 :  [[11.028464   0.7577088]]
+loss :  0.16846707463264465
+[10, 31, 211] 예측값 :  [[11.028464   0.7577088]]
 """

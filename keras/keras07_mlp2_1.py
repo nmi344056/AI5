@@ -9,8 +9,8 @@ x = np.array([[1,2,3,4,5,6,7,8,9,10],
 y = np.array([1,2,3,4,5,6,7,8,9,10])
 x = x.T
 
-print(x.shape)
-print(y.shape)
+print(x.shape)          # (10, 3)
+print(y.shape)          # (10,)
 
 #2. 모델구성
 model = Sequential()
@@ -27,10 +27,10 @@ model.fit(x,y, epochs=100, batch_size=1)
 #4. 평가, 예측
 loss = model.evaluate(x,y)
 result = model.predict([[11,1.2,-1]])
-print("로스 : ", loss)
+print("loss : ", loss)
 print("11 예측값 :", result)
 
 """
-로스 :  0.0001366408687317744
+loss :  0.0001366408687317744
 11 예측값 : [[10.967974]]
 """

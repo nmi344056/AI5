@@ -13,7 +13,7 @@ print(x)
 print(y)
 print(x.shape, y.shape)         # (20640, 8) (20640,)
 
-#[실습] 만들기 R2 0.59 이상
+#[실습] 만들기 R2 성능 0.59 이상
 
 random_state=123
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random_state=random_state)
