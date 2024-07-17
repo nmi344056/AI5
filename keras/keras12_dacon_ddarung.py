@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 
 #1. 데이터
-path = "./_data/따릉이/"        # 경로지정
+path = "./_data/따릉이/"        # 경로지정  상대경로
 
 train_csv = pd.read_csv(path + "train.csv", index_col=0)   # . = 루트 = AI5 폴더,  index_col=0 첫번째 열은 데이터가 아니라고 해줘
 print(train_csv)     # [1459 rows x 10 columns]
@@ -35,10 +35,10 @@ train_csv.info()
 
 ################### 결측치 처리 1. 삭제 ###################
 # print(train_csv.isnull().sum())
-print(train_csv.isna().sum())
+print(train_csv.isna().sum())   # 결측치 확인
 
-train_csv = train_csv.dropna()
-print(train_csv.isna().sum())
+train_csv = train_csv.dropna()   # 결측치 삭제
+print(train_csv.isna().sum())    # 삭제 뒤 결측치 확인
 print(train_csv)        #[1328 rows x 10 columns]
 print(train_csv.isna().sum())
 print(train_csv.info())
@@ -50,13 +50,13 @@ print(test_csv.info())
 test_csv = test_csv.fillna(test_csv.mean())     #컬럼끼리만 평균을 낸다
 print(test_csv.info())
 
-x = train_csv.drop(['count'], axis=1)           # drop = 컬럼 하나를 삭제할 수 있다.
+x = train_csv.drop(['count'], axis=1)           # drop = 컬럼 하나를 삭제할 수 있다.   # axis=1 이면 열, 0 이면 행  카운트 열을 지워라
 print(x)        #[1328 rows x 9 columns]
 y = train_csv['count']         # 'count' 컬럼만 넣어주세요
 print(y.shape)   # (1328,)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.95,
-                                                    random_state= 12015)
+                                                    random_state= 8000)
 
 
 #2. 모델구성
@@ -70,7 +70,7 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x, y, epochs=500, batch_size=32)
+model.fit(x_train, y_train, epochs=500, batch_size=32)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)

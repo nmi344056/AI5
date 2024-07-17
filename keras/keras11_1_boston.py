@@ -6,7 +6,12 @@ from tensorflow.keras.layers import Dense
 
 #1. 데이터
 dataset = load_boston()
-# print(dataset)
+print(dataset)
+print(dataset.DESCR)   # DESCR = pandas 의 describe
+print(dataset.feature_names)
+# ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO'
+#  'B' 'LSTAT']
+
 x = dataset.data
 y = dataset.target
 
