@@ -24,5 +24,10 @@ model.fit(x_train, y_train, epochs=1000, batch_size=1)
 print("++++++++++++++++++++")
 loss = model.evaluate(x_test,y_test)
 result = model.predict([11])
-print("로스 : ", loss)
-print("11 예측값 : ", result)
+print("loss : ", loss)
+print("[11]의 예측값 : ", result)
+
+'''
+loss :  0.0012149480171501637
+[11]의 예측값 :  [[10.94932]]
+'''

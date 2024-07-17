@@ -47,16 +47,15 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.85, rando
 
 #2. 모델구성
 model = Sequential()
-model.add(Dense(64, activation='relu', input_dim=8))
-model.add(Dense(32, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(8, activation='relu'))
-model.add(Dense(4, activation='relu'))
+model.add(Dense(50, activation='relu', input_dim=8))
+model.add(Dense(50, activation='relu'))
+model.add(Dense(50, activation='relu'))
+model.add(Dense(50, activation='relu'))
 model.add(Dense(1, activation='linear'))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=500, batch_size=50)
+model.fit(x_train, y_train, epochs=900, batch_size=50)
 
 #4. 평가, 예측
 print("++++++++++++++++++++")
@@ -76,7 +75,7 @@ sampleSubmission['count'] = y_submit
 print(sampleSubmission)               # [6493 rows x 1 columns]
 print(sampleSubmission.shape)         # (6493, 1)
 
-sampleSubmission.to_csv(path + "sampleSubmission_0717_1.csv")
+sampleSubmission.to_csv(path + "sampleSubmission_0717_2.csv")
 
 print("loss : ", loss)
 
