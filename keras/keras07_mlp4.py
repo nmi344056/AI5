@@ -15,10 +15,7 @@ y = np.transpose(y)
 print(x.shape)          # (10, 3)
 print(y.shape)          # (10, 3)
 
-"""
-[실습]
-x_predict = [11]
-"""
+# [실습] x_predict = [10]
 
 #2. 모델
 model = Sequential()
@@ -34,11 +31,11 @@ model.fit(x,y, epochs=100, batch_size=1)
 
 #4. 평가, 예측
 loss = model.evaluate(x,y)
-result = model.predict([[11]])
-print("로스 : ", loss)
-print("11 0 -1 예측값 : ", result)
+result = model.predict([[10]])
+print("loss : ", loss)
+print("[10]의 예측값 : ", result)
 
 """
-로스 :  0.0054276688024401665
-11 0 -1 예측값 :  [[11.9884205 -0.8387609 -2.1493042]]
+loss :  0.008623805828392506
+[10]의 예측값 :  [[10.854193   -0.07101604 -0.8720454 ]]
 """
