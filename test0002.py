@@ -19,5 +19,3 @@ loss = model.evaluate(x, y)
 print("로스 : ", loss)
 result = model.predict([1,2,3,4,5,6,7])
 print(result)
-
-
