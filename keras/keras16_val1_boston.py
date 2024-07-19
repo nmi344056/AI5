@@ -1,6 +1,3 @@
-import sklearn as sk
-print (sk.__version__)      # 0.24.2 / 1.4.2
-
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
@@ -37,10 +34,9 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=500, batch_size=10)
+model.fit(x_train, y_train, epochs=500, batch_size=10, validation_split=0.2)
 
 #4. 평가, 예측
-print("++++++++++++++++++++")
 loss = model.evaluate(x_test, y_test)
 print("loss : ", loss)
 
@@ -50,8 +46,7 @@ print("r2 score : ", r2)
 
 '''
 성능 0.8 이상
-100 30 500 30 100 30 1
-train_size=0.7, random_state=555 / epochs=500, batch_size=10
-loss :  18.820465087890625
-r2 score :  0.7611334589598369
+train_size=0.7, random_state=555 / epochs=500, batch_size=10, validation_split=0.2
+loss :  17.924062728881836
+r2 score :  0.7725105035697983
 '''

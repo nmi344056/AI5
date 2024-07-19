@@ -8,19 +8,20 @@ y = np.array([1,2,3,4,5,6,7,8,9,10])
 
 #[실습] 넘파이 리스트의 슬라이싱. 7:3으로 분할
 
-x_train = x[:7]
-# x_train = x[0:7]
-# x_train = x[:-3]
-# x_train = x[0:-3]
+x_train = x[:7]         # [1 2 3 4 5 6 7]
+# x_train = x[0:7]      # [1 2 3 4 5 6 7]
+# x_train = x[:-3]      # [1 2 3 4 5 6 7]
+# x_train = x[0:-3]     # [1 2 3 4 5 6 7]
 y_train = y[:7]
-x_test = x[7:]
-# x_test = x[7:10]
-# x_test = x[-3:]
-# x_test = x[-3:]
+
+x_test = x[7:]          # [ 8  9 10]
+# x_test = x[7:10]      # [ 8  9 10]
+# x_test = x[-3:]       # [ 8  9 10]
+# x_test = x[-3:10]     # [ 8  9 10]
 y_test = y[7:]
 
-print(x_train)      # [1 2 3 4 5 6 7]
-print(x_test)       # [ 8  9 10]
+print(x_train)          # [1 2 3 4 5 6 7]
+print(x_test)           # [ 8  9 10]
 
 #2. 모델구성
 model = Sequential()
@@ -34,10 +35,10 @@ model.fit(x_train, y_train, epochs=1000, batch_size=1)
 print("++++++++++++++++++++")
 loss = model.evaluate(x_test,y_test)
 result = model.predict([11])
-print("로스 : ", loss)
+print("loss : ", loss)
 print("11 예측값 : ", result)
 
 '''
-로스 :  0.003030030056834221
+loss :  0.003030030056834221
 11 예측값 :  [[10.920325]]
 '''

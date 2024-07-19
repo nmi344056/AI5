@@ -26,7 +26,7 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=500, batch_size=100)
+model.fit(x_train, y_train, epochs=500, batch_size=100, validation_split=0.2)
 
 #4. 평가,예측
 print("++++++++++++++++++++")
@@ -39,7 +39,7 @@ print("r2 score : ", r2)
 
 '''
 3 4 5 3 1
-train_size=0.7, random_state=123 / epochs=500, batch_size=100
-loss :  0.6134794354438782
-r2 score :  0.5360475094034194
+train_size=0.7, random_state=123 / 
+loss :  0.588417649269104
+r2 score :  0.5550008546448328
 '''
