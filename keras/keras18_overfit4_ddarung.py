@@ -7,6 +7,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
+import matplotlib.pyplot as plt
+import time
 
 #1. 데이터
 path = "./_data/따릉이/"
@@ -63,7 +65,9 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=1000, batch_size=23, validation_split=0.2)
+start = time.time()
+hist = model.fit(x_train, y_train, epochs=100, batch_size=23, validation_split=0.2, verbose=3)
+end = time.time()
 
 #4. 평가, 예측
 print("++++++++++++++++++++")
@@ -73,32 +77,17 @@ print("loss : ", loss)
 y_predict = model.predict(x_test)
 r2 = r2_score(y_test, y_predict)
 print("r2 score : ", r2)
+print("time : ", round(end - start, 2), "초")
 
-'''
-100 50 30 10 1 / train_size=0.82, random_state=4343 / epochs=1000, batch_size=30 / loss :  2054.7568359375
-100 50 30 10 1 / train_size=0.9, random_state=4343 / epochs=1000, batch_size=30 / loss :  1697.7445068359375 (제출1)
-81 27 45 18 1 / train_size=0.9, random_state=4343 / epochs=1000, batch_size=15 / loss :  1691.560791015625 (제출2)
-100 500 300 100 1 / train_size=0.9, random_state=4343 / epochs=700, batch_size=3 / loss :  1688.20947265625 (제출3)
-100 50 30 10 1 / train_size=0.982, random_state=4343 / epochs=1000, batch_size=30 / loss :  1356.6510009765625 (제출4)
-200 100 50 30 10 1 / train_size=0.982, random_state=4343 / epochs=1000, batch_size=30 / loss :  1336.6988525390625
-200 100 50 30 10 30 1 / train_size=0.98, random_state=4343 / epochs=1000, batch_size=30 / loss :  1601.2872314453125 (제출5)
-200 100 50 30 10 1 / train_size=0.9, random_state=5757 / epochs=1000, batch_size=30 / loss :  2201.14892578125
-200 100 50 30 10 1 / train_size=0.9, random_state=512 / epochs=1000, batch_size=30 / loss :  2556.475830078125 (제출6)
-30 20 10 1 / train_size=0.9, random_state=123 / epochs=700, batch_size=30 / loss :  2347.8154296875 (제출7)
-3 3 3 3 1 / train_size=0.8, random_state=4343 / epochs=700, batch_size=50 / loss :  2222.330078125 (제출8)
-100 50 30 10 1 / train_size=0.82, random_state=4343 / epochs=1000, batch_size=30 / loss :  2055.451904296875 (제출9)
-100 50 30 1 / train_size=0.87, random_state=4343 / epochs=1000, batch_size=23 / loss :  1921.1092529296875 (제출10)
-'''
+plt.rcParams['font.family'] ='Malgun Gothic'
+plt.rcParams['axes.unicode_minus'] =False
 
-y_submit = model.predict(test_csv)
-print(y_submit)
-print(y_submit.shape)           # (715, 1)
-
-########## submission.csv 만들기 (count컬럼에 값만 넣으면 된다) ##########
-submission_csv['count'] = y_submit
-print(submission_csv)           # [715 rows x 1 columns]
-print(submission_csv.shape)     # (715, 1)
-
-submission_csv.to_csv(path + "submission_0716_1930.csv")
-
-print("loss : ", loss)
+plt.figure(figsize=(9,6))
+plt.plot(hist.history['loss'], c='red', label='loss')
+plt.plot(hist.history['val_loss'], c='blue', label='val_loss')
+plt.legend(loc='upper right')
+plt.title('따릉이 Loss')
+plt.xlabel('epoch')
+plt.ylabel('loss')
+plt.grid()
+plt.show()

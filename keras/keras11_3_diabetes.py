@@ -15,8 +15,7 @@ print(x.shape, y.shape)          # (442, 10) (442,)
 
 #[실습]만들기 R2 성능 0.62 이상
 
-random_state=8000
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.79, random_state=random_state)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.79, random_state=8000)
 
 #2. 모델구성
 model = Sequential()
@@ -33,7 +32,6 @@ model.fit(x_train, y_train, epochs=500, batch_size=10)
 #4.평가, 예측
 print("++++++++++++++++++++")
 loss = model.evaluate(x_test, y_test)
-print("random_state : ", random_state)
 print("loss : ", loss)
 
 y_predict = model.predict(x_test)
