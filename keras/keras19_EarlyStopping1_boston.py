@@ -84,3 +84,5 @@ train_size=0.7, random_state=555 / epochs=500, batch_size=10, validation_split=0
 loss :  17.924062728881836
 r2 score :  0.7725105035697983
 '''
+
+print("++++++++++++++++++++")

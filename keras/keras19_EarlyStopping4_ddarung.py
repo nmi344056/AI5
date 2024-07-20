@@ -95,3 +95,5 @@ plt.xlabel('epoch')
 plt.ylabel('loss')
 plt.grid()
 plt.show()
+
+print("++++++++++++++++++++")
