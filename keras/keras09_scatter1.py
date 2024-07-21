@@ -7,14 +7,7 @@ from sklearn.model_selection import train_test_split
 x = np.array([1,2,3,4,5,6,7,8,9,10])
 y = np.array([1,2,3,4,7,5,7,8,6,10])
 
-#[검색] train과 test를 섞어서 7:3으로 분할 (사이킷런)
-
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=1004)
-
-print("x_train : ", x_train)    # x_train :  [ 6  9  4  2  7 10  3]
-print("x_test : ", x_test)      # x_test :  [5 1 8]
-print("y_train : ", y_train)    # y_train :  [ 6  9  4  2  7 10  3]
-print("y_test : ", y_test)      # y_test :  [5 1 8]
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=23)
 
 #2. 모델구성
 model = Sequential()
@@ -28,15 +21,26 @@ model.fit(x_train, y_train, epochs=100, batch_size=1)
 print("++++++++++++++++++++")
 loss = model.evaluate(x_test, y_test)
 result = model.predict(x)
-print("로스 : ", loss)
-print("[11] 예측값 : ", result)
 
-'''
-로스 :  0.00014058098895475268
-[11] 예측값 :  [[10.987593]]
-'''
+print("loss : ", loss)
+print("x의 예측값 : ", result)
 
 import matplotlib.pyplot as plt
 plt.scatter(x, y)
 plt.plot(x, result, color='red')
 plt.show()
+
+'''
+loss :  3.7444517612457275
+x의 예측값 :  
+[[ 1.2781501]
+ [ 2.2591982]
+ [ 3.2402463]
+ [ 4.2212944]
+ [ 5.2023425]
+ [ 6.1833906]
+ [ 7.1644387]
+ [ 8.145487 ]
+ [ 9.126535 ]
+ [10.107583 ]]
+'''
