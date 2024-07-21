@@ -1,0 +1,267 @@
+
+#1차 함수 (y=ax+b)
+
+model.add(Dense(1, input_dim=1))		y=ax+b
+
+y=ax+b : 직선 그래프 (1차 함수)
+a : 기울기, weight
+b : bias(바이어스), 절편(편향)
+
+점을 연결해서 예측값을 찾는다.
+입력값을 통해 a, b를 도출 - 입력값에 대한 예측값을 찾는다.
+
+y=ax+b 단일 구성 : 뉴런 1개 (input 1개에 output 1개)
+무수한 y=ax+b로 구성 : 인공지능
+
+--------------------------------------------------
+#인공지능에서 1차 함수 (y=wx+b)
+
+w : weight, 가중치
+b : bias
+
+w를 찾는 것이 최종 목표
+w가 b보다 예측값에 영향을 더 많이 준다.
+
+--------------------------------------------------
+#최적의 weight, 최소의 loss
+
+x=[1,2,3,4,5], y=[1,2,4,3,5]의 그래프 모양은?
+ - 꺽은선이 아니라 직선으로 긋는다. 모든 값을 지나지 않아도 된다.
+ - 오차를 인정 (loss), 최선의 직선을 긋는다. (선형 회귀)
+ - loss 값을 줄이는 것이 목표
+
+#인공지능의 계산 방법
+ - 처음(epoch=(0?1?#####))에는 선을 랜덤으로 그림 - loss 값이 크다. - epochs를 반복하면서 loss값을 줄인다.
+ - 결과값이 범위로 나타난다.
+ - 가장 좋다고 판단되는 예측값 : loss가 가장 적은 값 (= 최적의 w, 최소의 loss)
+ - 최적의 w를 구하기 위해 최소의 loss를 구한다.
+
+#loss의 가장 좋은 값 : 0
+ - loss의 음수는 양수와 같다. (절댓값, 제곱 등을 사용)
+ - 양수값으로 계산 : -1 + 1 = 0이 아닌, 1(-1) + 1 = 2
+
+#예측값이 결과값과 일치하는 것보다 loss가 적은 것이 중요
+
+--------------------------------------------------
+#epochs를 변경해서 loss가 적게나오는 epochs 찾기 (study/keras/keras03.py)
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+import numpy as np
+
+#1. 데이터
+x = np.array([1,2,3,4,5])
+y = np.array([1,2,4,3,5])
+
+model = Sequential()
+model.add(Dense(1, input_dim=1))
+
+epochs = 1000				epochs를 출력하기 위해 변수 생성
+#3. 컴파일 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x, y, epochs=epochs)		수정
+
+#4. 평가, 예측
+loss = model.evaluate(x, y)
+print("====================")
+print("epochs : ", epochs)			추가
+print("loss : ", loss)				0.37 미만은 나오지 않는다.
+result = model.predict([6])
+print("[6]의 예측값 [6] : ", result)
+
+"""
+5. 결과값 기록
+epochs :  1000
+loss :  0.38007014989852905
+[6]의 예측값 [6] :  [[5.713788]]
+"""
+
+--------------------------------------------------
+#하이퍼 파라미터 튜닝
+ : 모델의 성능을 올리기 위해서 파라미터 튜닝 (epoch, node, layer, batch_size 등 조절)
+
+#인공지능(머신러닝(인공신경망(딥러닝)))
+Machine Learning : 기계 학습, y=ax+b 단일 구성
+Deep Learning : 심층 신경망 학습, 무수한 y=ax+b로 구성, 파라미터의 개수=가중치의 개수
+
+뉴런=노드(node), 층=레이어(layer), 선(연산)=파라미터, 전체=모델(Deep Learning Model)
+
+from tensorflow.keras.models import Sequential
+ : Sequential (순차적으로 내려간다.)
+
+from tensorflow.keras.layers import Dense
+ : Dense (밀집하게 구성, 입력과 출력을 모두 연결)
+
+#레이어 구조
+input layer : 첫 번째 레이어, input이 들어간다.
+hidden layer : 중간의 레이어들, layer 개수 조절
+output layer : 마지막 레이어, output이 나온다.
+
+hidden layer부터는 상단의 output이 input이 되기 때문에 input_dim= 생략 가능
+
+# loss가 적은 최적의 layer 수와 node 수를 찾는 것이 중요
+
+--------------------------------------------------
+#하이퍼 파라미터 튜닝(node, layer)으로 실제값에 근접한 예측값 찾기 (study/keras/keras04_deep1.py)
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+import numpy as np
+
+#1. 데이터
+x = np.array([1,2,3,4,5])			array=배열
+y = np.array([1,2,3,4,5])
+
+"""
+[실습]
+레이어의 깊이와 노드의 개수를 이용해서 [6]을 만들기
+epochs는 100으로 고정
+소수 넷째 자리까지 맞추면 합격 (예 : 6.0000 또는 5.9999)
+"""
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(3, input_dim=1))		input_dim=input layer의 노드(열) 수
+model.add(Dense(4, input_dim=3))		파라미터 튜닝
+model.add(Dense(5, input_dim=4))
+model.add(Dense(4, input_dim=5))
+model.add(Dense(1, input_dim=4))
+
+epochs = 100
+#3. 컴파일 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x, y, epochs=epochs)
+
+#4. 평가, 예측
+loss = model.evaluate(x, y)
+print("====================")
+print("loss : ", loss)
+result = model.predict([6])
+print("[6]의 예측값 [6] : ", result)
+
+"""
+5. 결과값 기록
+3 4 5 4 1
+loss :  1.4377397405951342e-07
+[6]의 예측값 [6] :  [[6.0005965]]
+====================
+3 4 3 1
+loss :  2.49858771894651e-06
+[6]의 예측값 [6] :  [[5.9993324]]
+"""
+
+--------------------------------------------------
+#하이퍼 파라미터 튜닝(node, layer)으로 loss가 적게나오는 예측값 찾기 (study/keras/keras04_deep2.py)
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+import numpy as np
+
+#1. 데이터
+x = np.array([1,2,3,4,5,6])
+y = np.array([1,2,3,5,4,6])
+
+"""
+[실습]
+레이어의 깊이와 노드의 개수를 이용해서 최소의 loss를 만들기
+epochs는 100으로 고정
+loss 기준 0.32 미만
+"""
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(3, input_dim=1))
+model.add(Dense(100))			input_dim 생략가능 (input=상단 layer의 output)
+model.add(Dense(50))
+model.add(Dense(100))
+model.add(Dense(50))
+model.add(Dense(1))
+
+epochs = 100
+#3. 컴파일 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x, y, epochs=epochs)
+
+#4. 평가, 예측
+loss = model.evaluate(x, y)
+print("====================")
+print("loss : ", loss)				0.32 미만은 나오지 않는다.
+result = model.predict([6])
+print("[6]의 예측값 [6] : ", result)
+
+"""
+5. 결과값 기록
+3 100 50 100 50 1
+loss :  0.3238506615161896
+[6]의 예측값 [6] :  [[5.865899]]
+"""
+
+--------------------------------------------------
+#epochs와 batch_size
+
+x = np.array([1,2,3,4,5,6])의 값 [1,2,3,4,5,6]는 각각 입력이 아니라 한 번에 입력된다.
+ - 한 번에 많은 값을 연산하려면 메모리가 너무 많이 든다.
+ - 행렬을 통해 epochs 횟수를 늘리지 않고 (적은 메모리로) 여러 번 반복 훈련하는 효과를 줄 수 있다.
+ - 데이터를 쪼개서 훈련하는 것이 한 번에 훈련하는 것보다 효율적이다.
+ - n번 쪼개면 epochs=n 과 같이 n번 훈련(가중치 갱신)하는 효과를 줄 수 있다.
+
+batch_size=한 번에 훈련할 데이터 개수
+default batch_size = 32
+batch_size=3				3개씩 훈련
+
+batch_size=2				3/3로 변경되있다. (세 번에 나눠서 훈련)
+batch_size=3				2/2
+batch_size=4				2/2
+batch_size=5				2/2
+batch_size=6				1/1
+
+--------------------------------------------------
+#하이퍼 파라미터 튜닝(epoch, batch_size)으로 loss가 적게나오는 예측값 찾기 (study/keras/keras05_batch.py)
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+import numpy as np
+
+#1. 데이터
+x = np.array([1,2,3,4,5,6])
+y = np.array([1,2,3,5,4,6])
+
+"""
+[실습]
+keras04의 가장 좋은 레이어와 노드를 이용해서 최소의 loss를 만들기
+batch_size 조절
+epochs 변경 가능
+loss 기준 0.32 미만
+"""
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(3, input_dim=1))
+model.add(Dense(100))
+model.add(Dense(50))
+model.add(Dense(100))
+model.add(Dense(50))
+model.add(Dense(1))
+
+epochs = 100
+#3. 컴파일 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x, y, epochs=epochs, batch_size=25)	25개씩 훈련, 조절
+
+#4. 평가, 예측
+loss = model.evaluate(x, y)
+print("====================")
+print("loss : ", loss)				0.32 미만은 나오지 않는다.
+result = model.predict([6])
+print("[6]의 예측값 [6] : ", result)
+
+"""
+5. 결과값 기록
+3 100 50 100 50 1 / 25
+loss :  0.32393497228622437
+[6]의 예측값 [6] :  [[5.871721]]
+"""
+
+--------------------------------------------------
+
+

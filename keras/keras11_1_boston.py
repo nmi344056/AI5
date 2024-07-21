@@ -6,33 +6,32 @@ from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from sklearn.datasets import load_boston
+import numpy as np
 
 #1. 데이터
 dataset = load_boston()
-# print(dataset)
 x = dataset.data
 y = dataset.target
 
 print(dataset)
 print(dataset.DESCR)
 print(dataset.feature_names)
-# ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO'
-#  'B' 'LSTAT']
+# ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO' 'B' 'LSTAT']
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=555)
 print(x)
 print(x.shape)             # (506, 13)
 print(y)
 print(y.shape)             # (506,)
 
+# [실습] train_size : 0.7~0.9 ,  r2 : 0.8 이상
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=555)
+
 #2. 모델구성
 model = Sequential()
 model.add(Dense(100, input_dim=13))
-model.add(Dense(30))
-model.add(Dense(500))
-model.add(Dense(30))
-model.add(Dense(100))
-model.add(Dense(30))
+model.add(Dense(50))
+model.add(Dense(25))
+model.add(Dense(10))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
@@ -49,9 +48,8 @@ r2 = r2_score(y_test, y_predict)
 print("r2 score : ", r2)
 
 '''
-성능 0.8 이상
-100 30 500 30 100 30 1
-train_size=0.7, random_state=555 / epochs=500, batch_size=10
-loss :  18.820465087890625
-r2 score :  0.7611334589598369
+100 50 25 10 1
+train_size=0.8, random_state=555 / epochs=500, batch_size=10
+loss :  19.516820907592773
+r2 score :  0.7522954574324735
 '''

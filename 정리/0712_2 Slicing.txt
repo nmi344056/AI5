@@ -1,0 +1,132 @@
+
+#loss = model.evaluate(x,y)의 문제점
+
+문제점
+ - x, y 데이터로 훈련하고 x, y데이터로 평가하는 문제
+ - 훈련 내용의 정답을 외워서 결과값을 맞추고, 다른 값으로 평가하면 맞추지 못한다. (과적합)
+ - 학습 정확도를 알 수 없다. - loss 값은 낮게 나오는데 결과값이 맞지 않는 경우가 생긴다.
+
+해결
+ - 데이터를 훈련용과 평가용으로 분할 (training set, test set)
+ - 훈련은 훈련용 데이터로만 하고, 평가용 데이터는 평가에 사용하지 않는다.
+
+분할 비율
+ - 7:3, 8:2 비율로 많이 한다.
+ - 정보가 아주 많으면 9:1로도 한다.
+ - train의 개수가 많을수록 예측 정확도가 좋다.
+
+--------------------------------------------------
+#데이터 수동 분할 (keras08_train_test1.py)
+
+import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+#1. 데이터
+# x = np.array([1,2,3,4,5,6,7,8,9,10])
+# y = np.array([1,2,3,4,5,6,7,8,9,10])
+
+x_train = np.array([1,2,3,4,5,6,7])		수동 분할
+y_train = np.array([1,2,3,4,5,6,7])
+
+x_test = np.array([8,9,10])
+y_test = np.array([8,9,10])
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(1, input_dim=1))
+
+#3. 컴파일, 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x_train, y_train, epochs=200, batch_size=1)
+
+#4. 평가, 예측
+print("++++++++++++++++++++")
+loss = model.evaluate(x_test,y_test)
+result = model.predict([11])
+print("loss : ", loss)				0.2487889677286148
+print("[11] 예측값 [11] : ", result)		[[10.29315]]
+
+--------------------------------------------------
+#train 데이터의 학습결과, test 데이터의 평가 결과
+ - 위는 train 데이터의 학습결과, 아래는 test 데이터의 평가 결과
+ - 아래의 test 데이터로 loss 값을 판단한다.
+
+7/7 [==============================] - 0s 332us/step - loss: 0.0163
+++++++++++++++++++++
+1/1 [==============================] - 0s 48ms/step - loss: 0.0618
+
+--------------------------------------------------
+#Slicing 검색해서 찾아보기
+
+x = np.array(range(1, 101))			1~100
+
+x_train = x[:60]				1~60
+x_val = x[60:80]				61~80
+x_test = x[80:]				81~100
+
+--------------------------------------------------
+#배열의 Index
+
+Index
+ - 시퀀스 자료형으로 만든 객체에 들어있는 각 값(요소)의 순서
+ - 검색, 조회에 사용
+ - 0부터 시작, n-1이 마지막 (n <= i < m)
+
+Indexing
+ - 대괄호[] 안에 인덱스를 지정해서 해당 요소를 가져올 수 있다.
+
+x = 	 [1   2  3  4  5   6  7  8  9 10]
+Index	  0   1  2  3  4   5  6  7  8  9(n-1)
+	-10 -9 -8 -7 -6 -5 -4 -3 -2 -1
+
+x = np.array(range(1, 10))			[1,2,3,4,5,6,7,8,9,10]에서
+x_train = x[0:7]				0~6번쨰 Index의 요소 [1,2,3,4,5,6,7]
+
+--------------------------------------------------
+#Slicing을 사용해서 데이터를 순차적으로 분할 (keras08_train_test2.py)
+
+import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+#1. 데이터
+x = np.array([1,2,3,4,5,6,7,8,9,10])
+y = np.array([1,2,3,4,5,6,7,8,9,10])
+
+#[실습] 넘파이 리스트의 슬라이싱. 7:3으로 분할
+
+x_train = x[0:7]				[1 2 3 4 5 6 7]
+# x_train = x[:7]				동일
+# x_train = x[0:-3]
+# x_train = x[:-3]
+
+y_train = y[:7]
+
+x_test = x[7:10]				[ 8  9 10]
+# x_test = x[7:]				동일
+# x_test = x[-3:]
+
+y_test = y[7:]
+
+print(x_train)				[1 2 3 4 5 6 7]
+print(x_test)				[ 8  9 10]
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(1, input_dim=1))
+
+#3. 컴파일, 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x_train, y_train, epochs=700, batch_size=1)
+
+#4. 평가, 예측
+print("++++++++++++++++++++")
+loss = model.evaluate(x_test,y_test)
+result = model.predict([11])
+print("loss : ", loss)				0.14091362059116364
+print("[11] 예측값 [11] : ", result)		[[11.539274]]
+
+--------------------------------------------------
+
+

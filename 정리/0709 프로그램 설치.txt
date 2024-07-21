@@ -1,0 +1,102 @@
+
+#아나콘다 다운로드
+https://www.anaconda.com/download/success
+ - 실행파일 - 'Just Me' 체크 - 1, 2, 3 체크
+
+--------------------------------------------------
+#아나콘다에서 가상환경 생성, TensorFlow 설치 (cmd 창)
+
+C:\Users\bit>	python				파이썬 들어감
+>>>		[ctrl] + z				나가기, 입력하고 [Enter]를 눌러야 한다.
+
+C:\Users\bit>		conda create -n tf210 python==3.9.7 anaconda		텐서플로 2.10버전이라고 명명
+				y
+
+C:\Users\bit>		activate tf210		가상환경 들어감
+(tf210) C:\Users\bit>	deactivate		가상환경 나옴
+
+C:\Users\bit>		conda env list		environment(환경) 리스트 확인, base와 tf210
+C:\Users\bit>		activate base		가상환경에 들어가지 않고 파일 설치 시 base에 설치 된다.
+						base 환경에는 파일 설치를 하지 않는다.
+
+C:\Users\bit>		activate tf210		가상환경 안에 tensorflow 설치
+(tf210) C:\Users\bit>	pip install tensorflow	최신 버전 설치
+
+#
+pip install tensorflow==2.10				버전 지정 설치
+pip uninstall tensorflow				제거
+
+빨간 에러 읽어보기 (추가로 필요로 하는 실행 파일)
+
+(tf210) C:\Users\bit>	python
+>>>			import tensorflow as tf	as는 약칭
+>>>			tf.__version__		2.16.2 (tensorflow 버전) 출력
+
+--------------------------------------------------
+#VS Code(통합 툴) 다운로드 (Visual Studio Code, Visual Studio와는 다르다.)
+https://code.visualstudio.com/download
+ - 동의 - 1, 4, 5 체크 - 설치
+
+#C 드라이브 (SSD) : 작업, D 드라이브 (HDD) : 저장
+
+#VS Code에 폴더 연결
+C 드라이브 - 'ai5' 폴더 생성 - 'study' 폴더 생성
+VS Code - file - open folder - 'ai5' 폴더 선택 - new file - 'test0001.py' 생성
+
+#python 확장 프로그램 설치
+VS Code - Extensions - python 검색 - python, python, python indent, python Extension Pack 4개 설치
+
+--------------------------------------------------
+#VS Code에서 TensorFlow 버전 확인 (study/test001.py)
+
+cmd 창과 동일하게 입력
+실행 : [Ctrl] + [F5] - python debugger 클릭
+
+a=1
+b=1
+c=a+b
+print(c)					3 출력
+
+import tensorflow as tf
+print(tf.__version__)				ModuleNotFoundError 에러
+
+#base환경이여서 tf210에 설치한 텐서플로 사용 불가 - 오른쪽 아래 3.12.4 ('base':conda) 클릭 (3.12.4는 base에 대한 파이썬 버전)
+ - 상단의 Select Interpreter 에서 3.9.7 ('tf210') 선택 - 가상환경에서 작업
+
+print(tf.__version__)				2.16.2 출력, 정상 작동
+
+#읽어보기
+Warning : 문제가 있지만 넘어감
+Errors : 진행 불가
+
+--------------------------------------------------
+#폴더에서 파일 생성 시 VS Code에 연동 확인
+C 드라이브 - 'study' 폴더에 'test0002.txt' 생성 - 문자 입력 - 저장, 종료 - VS Code에서 확인
+
+--------------------------------------------------
+#epochs를 변경해서 실제값에 근접한 예측값 찾기 (study/keras/keras01.py)
+
+from tensorflow.keras.models import Sequential		tensorflow 생략 가능
+from tensorflow.keras.layers import Dense
+import numpy as np
+
+#1. 데이터
+x = np.array([1,2,3,])			괄호()안에서 콤마,는 이상이 없다.
+y = np.array([1,2,3])
+
+#2. 모델구성
+model = Sequential()			순차적으로 연산하는 모델
+model.add(Dense(1, input_dim=1))		input 1개에 output 1개
+
+#3. 컴파일, 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x, y, epochs=100)			fit=훈련, epochs=훈련 횟수, 훈련 횟수를 높일수록 예측값 정확
+
+#4. 평가, 예측
+result = model.predict(np.array([4]))		x=[4]의 y를 예측
+print("[4]의 예측값 : ", result)			[[2.676833]] 출력, 재실행 시 결과값이 다르다. (난수, 리셋)
+					loss=오차
+
+--------------------------------------------------
+
+

@@ -3,6 +3,7 @@ from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from sklearn.datasets import load_diabetes
+import numpy as np
 
 #1. 데이터
 datasets = load_diabetes()
@@ -13,8 +14,7 @@ print(x)
 print(y)
 print(x.shape, y.shape)          # (442, 10) (442,)
 
-#[실습]만들기 R2 성능 0.62 이상
-
+#[실습] r2 : 0.62 이상
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.79, random_state=8000)
 
 #2. 모델구성
@@ -39,8 +39,8 @@ r2 = r2_score(y_test, y_predict)
 print("r2 sorce : ", r2)
 
 '''
-100 75 50 30 1 (0.79)
-random_state :  999
-loss :  2237.555908203125
-r2 sorce :  0.5779882175127407
+100 75 50 30 1
+train_size=0.79, random_state=8000
+loss :  2484.401611328125
+r2 sorce :  0.6208688497522531
 '''

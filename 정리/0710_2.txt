@@ -1,0 +1,72 @@
+
+#마지막 버전을 설치하고 싶을 경우
+ - 버전==100(큰 수)를 입력 - 에러, 설치할 수 있는 모든 버전을 보여준다.
+
+pip install tensorflow==2.7.100		100(큰 수), 2.7.4 확인
+pip install tensorflow==2.7.4
+
+pip list					2.7.4 확인
+
+--------------------------------------------------
+#TensorFlow 2.7.4버전으로 변경 (cmd 창)
+ - 변경할 버전 설치, 작동 확인 후 2.10 버전 삭제
+
+C:\Users\bit>		conda create -n tf274 python==3.9.7 anaconda
+				y
+C:\Users\bit>		conda env list		tf210, tf274
+
+C:\Users\bit>		activate tf274
+(tf274) C:\Users\bit>	pip install tensorflow==2.7.4
+(tf274) C:\Users\bit>	pip list			pip(Package Installer of python)
+(tf274) C:\Users\bit>	deactivate
+
+VS Code에서 2.7.4버전으로 실행 확인			Python Debug Console을 휴지통으로 삭제
+
+C:\Users\bit>		activate tf210
+(tf210) C:\Users\bit>	pip uninstall tensorflow
+(tf210) C:\Users\bit>	pip list			텐서플로 제거 후 잔당 확인
+(tf274) C:\Users\bit>	deactivate		가상환경 삭제는 가상환경 밖에서 진행
+
+C:\Users\bit>		conda remove -n tf210 --all
+C:\Users\bit>		conda env list
+
+--------------------------------------------------
+#epochs를 변경해서 loss가 적게나오는 epochs 찾기 (study/keras/keras02.py)
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+import numpy as np
+
+#1. 데이터
+x = np.array([1,2,3,4,5,6])			데이터가 많아질수록 훈련시간이 줄어든다? 랜덤
+y = np.array([1,2,3,4,5,6])
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(1, input_dim=1))		output 1개=y, input 1개=x (y=wx+b)
+
+#3. 컴파일, 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x, y, epochs=10000)
+
+#4. 평가, 예측
+loss = model.evaluate(x, y)			loss의 최종값 반환
+print("loss : ", loss)
+result = model.predict([1,2,3,4,5,6,7])
+print("[1,2,3,4,5,6,7]의 예측값 : ", result)	출력은 주석으로 기록
+
+'''
+로스 :  5.138560155160121e-08
+[1,2,3,4,5,6,7]의 예측값 :  
+[[0.99961025]
+ [1.9997346 ]
+ [2.999859  ]
+ [3.9999835 ]
+ [5.0001082 ]
+ [6.0002327 ]
+ [7.000357  ]]
+'''
+
+--------------------------------------------------
+
+

@@ -1,0 +1,74 @@
+
+#포맷 준비
+
+유지할 자료는 D 드라이브로 옮기기
+
+D 드라이브 만들기 (D 드라이브가 없을경우)
+윈도우 - diskmgmt.msc 검색 - 디스크 관리 - 하단의 '디스크0' 우클릭 - 단순 볼륨 설치 (파티션 작업)
+
+----------
+#메인보드 드라이브 정보 확인
+
+컴퓨터 재부팅 - 켜질 때 [Delete] 연타 - 이지 모드 - 제품 모델 확인
+Exit : [Ctrl] + [Alt] + [Delete]
+
+구글 - 'ASUS 메인보드 드라이브' 검색 - 다운로드 센터 - 제품 모델 (TUF GAMING z690-plus d4) 검색
+ - 드라이버&툴 - Windows 10 선택 - LAN, Audio, VGA 총 3개 다운
+
+구글 - '기가바이트 메인보드 드라이브' 검색 - 다운로드 센터 - 카테고리 선택하기
+ - 메인보드(M/B) / GAMING / Intel Z690 / Z690 GAMING X (rev. 1.0/1.1) - Driver - 총 3개 다운
+ -  Audio : Realtek HD Audio Driver OS: Windows 11 64bit,Windows 10 64bit
+ -  LAN : Realtek LAN Driver OS: Windows 10 64bit (최신버전으로 설치)
+ -  VGA : Intel Graphic Driver OS: Windows 11 64bit,Windows 10 64bit
+
+https://www.asus.com/kr/motherboards-components/motherboards/tuf-gaming/tuf-gaming-z690-plus-d4/helpdesk_download?model2Name=TUF-GAMING-Z690-PLUS-D4
+https://www.gigabyte.com/kr/Motherboard/Z690-GAMING-X-rev-10-11/support#support-dl-driver-audio
+
+----------
+#그래픽 드라이브
+
+구글 - 'Nvidia 그래픽 드라이버' 검색 - Nvidia 드라이버 다운로드
+ - 시리즈: GeForce RTX 30 series / 계열: GeForce RTX 3070 Ti
+
+https://www.nvidia.co.kr/content/DriverDownloads/confirmation.php?url=/Windows/556.12/556.12-desktop-win10-win11-64bit-international-dch-whql.exe&lang=kr&type=GeForce
+
+----------
+#윈도우10 부팅 USB 만들기
+구글 - '윈도우10 부팅디스크 만들기' 검색 - '윈도우10 부팅 USB 쉽고 빠르게 만들기' 블로그 보고 따라 하기
+
+Windows 10 실행파일 다운로드
+https://www.microsoft.com/ko-kr/software-download/windows10
+
+Windows 10 부팅 USB 만들기
+- 지금 도구 다운로드 - 'MediaCreationTool_22H2' 실행 - 블로그 보고 따라 하기
+
+--------------------------------------------------
+#포맷
+
+랜선 없는 상태로 진행 (불필요한 회원가입 작업이 없게)
+
+컴퓨터 재부팅 - 켜질 때 [Delete] 연타 - 고급 모드(F7)
+ - boot - option #1 - [Enter] - USB 선택 (USB 우선으로 변경)
+ - exit - save changes & reset
+
+USB(Windows 10 설치)로 켜진다.
+Windows 10 설치 - 키 X - 10 Pro - 사용자 지정
+ - 드라이브 1 모두 삭제 - 드라이브 1이 '할당되지 않은 공간'으로 표시 - 인터넷 X - 제한된 설치로 계속
+
+--------------------------------------------------
+#포맷 후 미리 다운로드한 드라이브 실행파일로 드라이브 설치
+
+#그래픽 드라이브 설치 및 확인
+'556.12-desktop-win10-win11-64bit-international-dch-whql' 실행 - 사용자 정의 - 전체 설치 수행 - 체크 해제
+윈도우 - cmd - nvidia-smi - 'NVIDIA-SMI 556.12' 버전 확인
+
+#장치 확인
+윈도우 - 제어판 - 장치 관리자
+ - 네트워크 어댑터 - 인텔 확인
+ - 디스플레이 어댑터 - 그래픽 드라이브(Nvidia) 확인
+
+#인터넷 연결 여부 확인
+
+--------------------------------------------------
+
+

@@ -1,0 +1,168 @@
+
+#scatter(점 그래프)를 사용해서 시각화 (keras09_scatter1.py)
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+#1. 데이터
+x = np.array([1,2,3,4,5,6,7,8,9,10])
+y = np.array([1,2,3,4,7,5,7,8,6,10])
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, shuffle=True, random_state=23)
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(1, input_dim=1))
+
+#3. 컴파일, 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x_train, y_train, epochs=100, batch_size=1)
+
+#4. 평가, 예측
+print("++++++++++++++++++++")
+loss = model.evaluate(x_test, y_test)
+result = model.predict(x)			[x]로도 가능
+
+print("loss : ", loss)
+print("x의 예측값 : ", result)
+
+import matplotlib.pyplot as plt		시각화할 때 많이 쓴다.
+plt.scatter(x, y)				scatter=흩뿌리다, 원값의 위치를 점으로 표시
+plt.plot(x, result, color='red')			예측값을 선으로 표시
+plt.show()				그래프 확인, 끝에 약간의 오차가 보인다.
+
+'''
+loss :  3.7444517612457275
+x의 예측값 : 
+[[ 1.2781501]
+ [ 2.2591982]
+ [ 3.2402463]
+ [ 4.2212944]
+ [ 5.2023425]
+ [ 6.1833906]
+ [ 7.1644387]
+ [ 8.145487 ]
+ [ 9.126535 ]
+ [10.107583 ]]
+'''
+
+--------------------------------------------------
+#scatter(점 그래프)를 사용해서 시각화 2 (keras09_scatter2.py)
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from sklearn.model_selection import train_test_split
+import numpy as np
+import matplotlib.pyplot as plt
+
+#1. 데이터
+x = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20])
+y = np.array([1,2,4,3,5,7,9,3,8,12,13,8,14,15,9,6,17,23,21,20])
+
+#[실습] 만들기
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random_state=123)
+
+print("x_train : ", x_train)
+print("x_test : ", x_test)
+print("y_train : ", y_train)
+print("y_test : ", y_test)
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(10, input_dim=1))
+model.add(Dense(10))
+model.add(Dense(10))
+model.add(Dense(10))
+model.add(Dense(1))
+
+#3. 컴파일, 훈련
+model.compile(loss='mse', optimizer='adam')
+model.fit(x_train, y_train, epochs=100, batch_size=1)
+
+#4. 평가, 예측
+print("++++++++++++++++++++")
+loss = model.evaluate(x_test, y_test)
+result = model.predict(x)
+
+print("loss : ", loss)
+print("x의 예측값 : ", result)
+
+plt.scatter(x, y)
+plt.plot(x, result, color='red')
+plt.show()
+
+--------------------------------------------------
+#Sklearn의 r2_score를 보조 지표로 사용
+ - 하나의 지표로는 신뢰하기 힘들다. - 2개의 지표를 사용해서 공신력을 높인다.
+
+#R2 = R² = R 제곱 = R-squared = 결정계수
+ - 회귀 모델 성능 평가 지표 중 하나
+ - 독립변수가 종속변수를 얼마나 잘 설명하는지를 나타낸다. (설명력)		#####
+ - 상관계수를 제곱한 값
+ - 0과 1 사이 값
+ - 설명력 : 100%(최대) = 1.0, 0%(최소) = 0 (1에 가까울수록 잘 설명한다.)
+ - 마이너스(-) 값이 나오기도 한다.
+
+#비슷한 지표 : Accuracy (정확도)
+ - 0과 1 사이 값
+ - 분류 모델 성능 평가 지표 중 하나
+ - 실제 데이터와 예측 데이터의 일치 여부를 판단하기 때문에 회귀 모델 평가엔 적합하지 않다.
+
+ - 회귀 : loss와 R2로 판단
+ - 분류 : loss와 Accuracy로 판단
+
+y값의 종류가 여러가지면 - 회귀데이터
+1 0 - 분류데이터
+
+--------------------------------------------------
+#하이퍼 파라미터 튜닝으로 r2_score를 1에 근접하게 만들기 (keras10_R2.py)
+
+#[실습] 09_2 copy
+#[검색] R2
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+#1. 데이터
+x = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20])
+y = np.array([1,2,4,3,5,7,9,3,8,12,13,8,14,15,9,6,17,23,21,20])
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random_state=23)
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(10, input_dim=1))
+model.add(Dense(10))
+model.add(Dense(10))
+model.add(Dense(10))
+model.add(Dense(1))
+
+#3. 컴파일, 훈련
+model.compile(loss='mse', optimizer='adam')		loss='mse', train : loss값이 더 좋게 나온다. #####
+model.fit(x_train, y_train, epochs=100, batch_size=1)
+
+#4. 평가, 예측
+print("++++++++++++++++++++")
+loss = model.evaluate(x_test, y_test)			loss='mse', test : loss값이 더 크게 나온다. #####
+print("loss : ", loss)
+
+y_predict = model.predict(x_test)
+
+from sklearn.metrics import r2_score
+r2 = r2_score(y_test, y_predict)			원값(y_test)과 예측값(y_predict)을 r2로 비교
+print("r2 score : ", r2)
+
+'''
+random_state=23 / epochs=100
+loss :  2.6504194736480713
+r2 score :  0.8296159402956305
+'''
+
+--------------------------------------------------
+
+
