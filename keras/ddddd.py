@@ -27,9 +27,9 @@ model.fit(x_train, y_train, epochs=200, batch_size=1)
 #4. 평가, 예측
 print("++++++++++++++++++++")
 loss = model.evaluate(x_test,y_test)
-result = model.predict([11])
+result = model.predict([10000])
 print("loss : ", loss)
-print("[11] 예측값 : ", result)
+print("[10000] 예측값 [10000] : ", result)
 
 '''
 random_state=23 / epochs=200

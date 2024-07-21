@@ -29,16 +29,17 @@ model.add(Dense(1, input_dim=1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=1000, batch_size=1)
+model.fit(x_train, y_train, epochs=200, batch_size=1)
 
 #4. 평가, 예측
 print("++++++++++++++++++++")
 loss = model.evaluate(x_test,y_test)
 result = model.predict([11])
 print("loss : ", loss)
-print("11 예측값 : ", result)
+print("[11] 예측값 [11] : ", result)
 
 '''
-loss :  0.003030030056834221
-11 예측값 :  [[10.920325]]
+epochs=200
+loss :  0.14091362059116364
+[11] 예측값 [11] :  [[11.539274]]
 '''
