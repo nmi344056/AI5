@@ -77,7 +77,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(
     monitor = 'val_loss',
     mode = 'min',
-    patience =10,
+    patience =20,
     restore_best_weights=True
 )
 hist = model.fit(x_train, y_train, validation_split=0.2,

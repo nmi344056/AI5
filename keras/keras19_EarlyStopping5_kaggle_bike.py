@@ -61,12 +61,12 @@ print(x)            # [10886 rows x 8 columns]
 y = train_csv['count']
 print(y.shape)      #(10886,)
 
-x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.97,
-                                                    random_state = 3111)
+x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.9,
+                                                    random_state = 68481)
 
 #2. 모델구성
 model = Sequential()
-model.add(Dense(10, activation='relu', input_dim=13))
+model.add(Dense(10, activation='relu', input_dim=8))
 model.add(Dense(20, activation='relu'))
 model.add(Dense(30, activation='relu'))
 model.add(Dense(40, activation='relu'))
@@ -109,14 +109,14 @@ model.add(Dense(1, activation='linear'))
 model.compile(loss='mse', optimizer='adam')
 start = time.time()
 
-from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(
-    monitor = 'val_loss',
+from tensorflow.keras.callbacks import EarlyStopping 
+es = EarlyStopping(                                               
+    monitor = 'val_loss',                                              
     mode = 'min',
     patience = 20,
     restore_best_weights = True
 )
-hist = model.fit(x_train, y_train, epochs = 500, batch_size=55,
+hist = model.fit(x_train, y_train, epochs = 600, batch_size=50,
                  validation_split=0.25,
                  callbacks=[es])
 end = time.time()

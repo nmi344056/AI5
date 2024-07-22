@@ -17,7 +17,7 @@ print(x.shape, y.shape)     #(442, 10) (442,)
 from sklearn.model_selection import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9,
-                                                    random_state= 8000)
+                                                    random_state= 9000)
 
 #2. 모델구성
 model = Sequential()
@@ -35,12 +35,12 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(
     monitor='val_loss',
     mode = 'min',
-    patience=10,
+    patience=20,
     restore_best_weights=True,
 
 )
 hist = model.fit(x_train, y_train, validation_split=0.25,
-           epochs=1500, batch_size=15,
+           epochs=1000, batch_size=20,
            callbacks=[es])
 end = time.time()
 
