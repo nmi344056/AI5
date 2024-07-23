@@ -52,7 +52,8 @@ model.add(Dense(10, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 
 #3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam', metrics=['accuracy', 'acc', 'mse'])  # 매트릭스에 애큐러시를 넣으면 반올림해준다.
+# model.compile(loss='mse', optimizer='adam', metrics=['accuracy', 'acc', 'mse'])  # 매트릭스에 애큐러시를 넣으면 반올림해준다.
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
 start = time.time()
 
 es = EarlyStopping(
@@ -87,3 +88,4 @@ print("걸린시간 : ", round(end - start , 2),"초")
 # 로스 :  [0.02593756467103958, 0.9649122953414917, 0.9649122953414917, 0.02593756467103958]
 # acc :  0.965
 # acc_score :  0.9824561403508771
+

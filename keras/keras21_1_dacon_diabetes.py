@@ -48,7 +48,7 @@ print(pd.DataFrame(y).value_counts())
 pd.value_counts(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.8,
-                                                    random_state=3333)
+                                                    random_state=1)
 
 print(x_train.shape, y_train.shape)
 print(x_test.shape, y_test.shape)
@@ -57,29 +57,34 @@ print(x_test.shape, y_test.shape)
 model = Sequential()
 model.add(Dense(16, activation='relu', input_dim=8))
 
+model.add(Dense(32, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
 model.add(Dense(16, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(16, activation='relu'))
+model.add(Dense(8, activation='relu'))
+model.add(Dense(4, activation='relu'))
+model.add(Dense(2, activation='relu'))
 
 model.add(Dense(1, activation='sigmoid'))
 
 #3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam', metrics=['acc'])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
 start = time.time()
 
 es = EarlyStopping(
     monitor = 'val_loss',
     mode = 'min',
-    patience = 64,
+    patience = 1000,
     restore_best_weights=True
 )
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=1,
-                 validation_split=0.3,
+hist = model.fit(x_train, y_train, epochs=100000, batch_size=80,
+                 validation_split=0.2,
                  callbacks=[es]
                  )
 end = time.time()
@@ -108,7 +113,7 @@ submission_csv['Outcome'] = y_submit
 print(submission_csv)
 print(submission_csv.shape)
 
-submission_csv.to_csv(path + "submission_0722.csv")
+submission_csv.to_csv(path + "submission_0723.csv")
 
 print('로스 :', loss)
 print("acc :", round(loss[1],3))
@@ -126,4 +131,9 @@ print("acc :", round(loss[1],3))
 # acc : 0.794
 
 
+# 로스 : [0.5948110222816467, 0.7878788113594055]
+# acc : 0.788
 
+
+# 로스 : [0.4769526422023773, 0.7938931584358215]
+# acc : 0.794

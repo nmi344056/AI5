@@ -66,7 +66,35 @@ test_csv.info()     # 결측치 없음
 
 test_csv = test_csv.drop(['CustomerId', 'Surname'], axis=1)
 
-x = train_csv.drop(['CustomerId', 'Surname', 'Exited'], axis=1)
+###############################################
+train_csv=train_csv.drop(['CustomerId', 'Surname'], axis=1)
+
+from sklearn.preprocessing import MinMaxScaler
+
+train_scaler = MinMaxScaler()
+
+train_csv_copy = train_csv.copy()
+
+train_csv_copy = train_csv_copy.drop(['Exited'], axis = 1)
+
+train_scaler.fit(train_csv_copy)
+
+train_csv_scaled = train_scaler.transform(train_csv_copy)
+
+train_csv = pd.concat([pd.DataFrame(data = train_csv_scaled), train_csv['Exited']], axis = 1)
+
+test_scaler = MinMaxScaler()
+
+test_csv_copy = test_csv.copy()
+
+test_scaler.fit(test_csv_copy)
+
+test_csv_scaled = test_scaler.transform(test_csv_copy)
+
+test_csv = pd.DataFrame(data = test_csv_scaled)
+###############################################
+
+x = train_csv.drop(['Exited'], axis = 1)
 print(x)    # [165034 rows x 10 columns]
 
 y = train_csv['Exited']
@@ -82,7 +110,7 @@ print(pd.DataFrame(y).value_counts())
 pd.value_counts(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.8,
-                                                    random_state=14115)
+                                                    random_state=7641)
 
 print(x_train.shape, y_train.shape)
 print(x_test.shape, y_test.shape)
@@ -92,6 +120,14 @@ model = Sequential()
 model.add(Dense(16, activation='relu', input_dim=10))
 model.add(Dense(32, activation='relu'))
 model.add(Dense(64, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dense(128, activation='relu'))
 model.add(Dense(128, activation='relu'))
 model.add(Dense(128, activation='relu'))
@@ -118,16 +154,16 @@ model.add(Dense(2, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 
 #3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam', metrics=['acc'])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
 start = time.time()
 
 es = EarlyStopping(
     monitor = 'val_loss',
     mode = 'min',
-    patience = 100,
+    patience = 40,
     restore_best_weights=True
 )
-hist = model.fit(x_train, y_train, epochs=10000, batch_size=32,
+hist = model.fit(x_train, y_train, epochs=1000, batch_size=279,
                  validation_split=0.2,
                  callbacks=[es]
                  )
@@ -148,6 +184,8 @@ acc_score = accuracy_score(y_test, y_pred)
 print('acc_score :', acc_score)
 print('걸린시간 : ', round(end - start, 2), "초")
 
+print(test_csv.shape)
+
 y_submit = np.round(model.predict(test_csv))      # round 꼭 넣기
 print(y_submit)
 print(y_submit.shape)     
@@ -157,8 +195,11 @@ submission_csv['Exited'] = y_submit
 print(submission_csv)
 print(submission_csv.shape)
 
-# submission_csv.to_csv(path + "submission_0722.csv")
+submission_csv.to_csv(path + "submission_0723_1223.csv")
 
 print('로스 :', loss)
 print("acc :", round(loss[1],3))
 
+# x,y,train_size=0.8, random_state=1186
+# 로스 : [0.32787516713142395, 0.8625140190124512]
+# acc : 0.863
