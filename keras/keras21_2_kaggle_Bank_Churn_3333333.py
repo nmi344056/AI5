@@ -36,12 +36,39 @@ test_csv['Geography'] = encoder.fit_transform(test_csv['Geography'])
 train_csv['Gender'] = encoder.fit_transform(train_csv['Gender'])
 test_csv['Gender'] = encoder.fit_transform(test_csv['Gender'])
 
-x = train_csv.drop(['CustomerId', 'Surname', 'Exited'], axis=1)
+train_csv = train_csv.drop(['CustomerId', 'Surname'], axis=1)
+test_csv = test_csv.drop(['CustomerId', 'Surname'], axis=1)
+
+###############################################
+from sklearn.preprocessing import MinMaxScaler
+
+train_scaler = MinMaxScaler()
+
+train_csv_copy = train_csv.copy()
+
+train_csv_copy = train_csv_copy.drop(['Exited'], axis = 1)
+
+train_scaler.fit(train_csv_copy)
+
+train_csv_scaled = train_scaler.transform(train_csv_copy)
+
+train_csv = pd.concat([pd.DataFrame(data = train_csv_scaled), train_csv['Exited']], axis = 1)
+
+test_scaler = MinMaxScaler()
+
+test_csv_copy = test_csv.copy()
+
+test_scaler.fit(test_csv_copy)
+
+test_csv_scaled = test_scaler.transform(test_csv_copy)
+
+test_csv = pd.DataFrame(data = test_csv_scaled)
+###############################################
+
+x = train_csv.drop(['Exited'], axis=1)
 print(x)                            # [165034 rows x 10 columns]
 y = train_csv['Exited']
 print(y.shape)                      # (165034,)
-
-test_csv = test_csv.drop(['CustomerId', 'Surname'], axis=1)
 
 print(np.unique(y, return_counts=True))     
 # (array([0, 1], dtype=int64), array([130113,  34921], dtype=int64))
@@ -49,7 +76,11 @@ print(pd.DataFrame(y).value_counts())
 # 0         130113
 # 1          34921
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=6666)
+from sklearn.preprocessing import MinMaxScaler
+scalar=MinMaxScaler()
+x[:] = scalar.fit_transform(x[:])
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=1186)
 
 #2. 모델구성
 model = Sequential()
@@ -61,7 +92,7 @@ model.add(Dense(32, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 
 #3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 start_time = time.time()
 es = EarlyStopping(             # arlyStopping 정의
     monitor='val_loss', 
@@ -70,7 +101,7 @@ es = EarlyStopping(             # arlyStopping 정의
     restore_best_weights=True,
 )
 
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=30, validation_split=0.2, 
+hist = model.fit(x_train, y_train, epochs=1000, batch_size=512, validation_split=0.2, 
                  callbacks=[es])
 end_time = time.time()
 
@@ -99,4 +130,6 @@ mission_csv.to_csv(path + "sample_submission_0722_1900.csv")
 32 16 16 16 16 1
 train_size=0.8, random_state=3434 / epochs=100, batch_size=16, validation_split=0.2
 acc score :  0.7709923664122137
+++++++++++++++++++++++++++++++
+acc score :  0.8643924016117793
 '''

@@ -66,27 +66,25 @@ es = EarlyStopping(monitor='val_loss', mode='min', patience=10, restore_besr_wei
 hist = model.fit(x_train, y_train, epochs=400, batch_size=50, validation_split=0.2, verbose=3, callbacks=[es])
 end = time.time()
 
-# #4. 평가, 예측
-# print("++++++++++++++++++++")
-# loss = model.evaluate(x_test, y_test)
-# print("loss : ", loss)
+#4. 평가, 예측
+print("++++++++++++++++++++")
+loss = model.evaluate(x_test, y_test)
+print("loss : ", loss)
 
-# y_predict = model.predict(x_test)
-# r2 = r2_score(y_test, y_predict)
-# print("re score : ", r2)
-# print("time : ", round(end - start, 2), "초")
+y_predict = model.predict(x_test)
+r2 = r2_score(y_test, y_predict)
+print("re score : ", r2)
+print("time : ", round(end - start, 2), "초")
 
-# plt.rcParams['font.family'] ='Malgun Gothic'
-# plt.rcParams['axes.unicode_minus'] =False
+plt.rcParams['font.family'] ='Malgun Gothic'
+plt.rcParams['axes.unicode_minus'] =False
 
-# plt.figure(figsize=(9,6))
-# plt.plot(hist.history['loss'], c='red', label='loss')
-# plt.plot(hist.history['val_loss'], c='blue', label='val_loss')
-# plt.legend(loc='upper right')
-# plt.title('캐글 바이크 Loss')           # 한글은 깨진다
-# plt.xlabel('epoch')
-# plt.ylabel('loss')
-# plt.grid()
-# plt.show()
-
-# print("++++++++++++++++++++")
+plt.figure(figsize=(9,6))
+plt.plot(hist.history['loss'], c='red', label='loss')
+plt.plot(hist.history['val_loss'], c='blue', label='val_loss')
+plt.legend(loc='upper right')
+plt.title('캐글 바이크 Loss')           # 한글은 깨진다
+plt.xlabel('epoch')
+plt.ylabel('loss')
+plt.grid()
+plt.show()

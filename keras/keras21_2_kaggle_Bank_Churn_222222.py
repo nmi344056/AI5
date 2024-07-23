@@ -6,6 +6,7 @@ import time
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
+from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import LabelEncoder
@@ -52,12 +53,16 @@ from sklearn.preprocessing import MinMaxScaler
 scalar=MinMaxScaler()
 x[:] = scalar.fit_transform(x[:])
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=6666)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=1866)
+
+x_test = x_test[:] = scalar.fit_transform(x_test[:])
 
 #2. 모델구성
 model = Sequential()
 model.add(Dense(32, input_dim=10))
 model.add(Dense(64, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dense(128, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
@@ -73,7 +78,7 @@ es = EarlyStopping(             # arlyStopping 정의
     restore_best_weights=True,
 )
 
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=30, validation_split=0.2, 
+hist = model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_split=0.2, 
                  callbacks=[es])
 end_time = time.time()
 
@@ -104,5 +109,7 @@ train_size=0.8, random_state=3434 / epochs=100, batch_size=16, validation_split=
 acc score :  0.7709923664122137
 
 ++++++++++++++++++++++++++++++
-acc score :  0.8643924016117793
+random_state=6666
+random_state=1866
+random_state=1186
 '''

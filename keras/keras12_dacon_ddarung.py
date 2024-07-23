@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 
 #1. 데이터
-path = "./_data/따릉이/"
+path = "./_data/dacon/따릉이/"
 
 train_csv = pd.read_csv(path + "train.csv", index_col=0)
 print(train_csv)            # [1459 rows x 11 columns] / [1459 rows x 10 columns]
@@ -63,7 +63,7 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=1000, batch_size=23)
+model.fit(x_train, y_train, epochs=100, batch_size=23)
 
 #4. 평가, 예측
 print("++++++++++++++++++++")
