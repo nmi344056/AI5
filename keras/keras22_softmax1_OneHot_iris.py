@@ -33,12 +33,12 @@ print(pd.value_counts(y))
 # print(y_ohe.shape)
 
 # 사이킷런
-from sklearn.preprocessing import OneHotEncoder     # 전처리
-y_ohe3 = y.reshape(-1, 1)
-ohe = OneHotEncoder(sparse=False)    # True가 디폴트 
-y_ohe3 = ohe.fit_transform(y_ohe3)   # -1 은 데이터 수치의 끝 
-                                # sklearn의 문법 = 행렬로 주세요, reshape 할때 데이터의 값과 순서가 바뀌면 안된다.
-print(y_ohe3)
+# from sklearn.preprocessing import OneHotEncoder     # 전처리
+# y_ohe3 = y.reshape(-1, 1)
+# ohe = OneHotEncoder(sparse=False)    # True가 디폴트 
+# y_ohe3 = ohe.fit_transform(y_ohe3)   # -1 은 데이터 수치의 끝 
+#                                 # sklearn의 문법 = 행렬로 주세요, reshape 할때 데이터의 값과 순서가 바뀌면 안된다.
+# print(y_ohe3)
 
 #  판다스
 # y_ohe2 = pd.get_dummies(y) 
@@ -47,10 +47,12 @@ print(y_ohe3)
 
 
 
-x_train, x_test, y_train, y_test = train_test_split(x,y_ohe3, train_size=0.8,
-                                                      random_state=315)
+x_train, x_test, y_train, y_test = train_test_split(x,y, train_size=0.8,
+                                                      random_state=315, stratify=y)
 print(x_train.shape, y_train.shape)     # (120, 4) (120,)
 print(x_test.shape, y_test.shape)       # (30, 4) (30,)
+
+print(pd.value_counts(y_train)) 
 
 #2. 모델구성
 model = Sequential()

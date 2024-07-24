@@ -26,7 +26,7 @@ y = pd.get_dummies(y)
 print(y.shape)      # (178, 3)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y, train_size=0.9,
-                                                    random_state=2321)
+                                                    random_state=2321, stratify=y)
 
 #2. 모델구성
 model = Sequential()
