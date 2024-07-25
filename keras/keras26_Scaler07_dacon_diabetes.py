@@ -43,8 +43,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 # scaler = MinMaxScaler()
-scaler = StandardScaler()
-# scaler = MaxAbsScaler()
+# scaler = StandardScaler()
+scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
 scaler.fit(x_train)
@@ -67,7 +67,7 @@ model.add(Dense(1, activation='sigmoid'))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=1000, batch_size=16, validation_split=0.2)
+model.fit(x_train, y_train, epochs=100, batch_size=16, validation_split=0.2)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -87,13 +87,17 @@ print(y_submit.shape)       # (116, 1)
 
 y_submit = np.round(y_submit)
 mission_csv['Outcome'] = y_submit
-mission_csv.to_csv(path + "sample_submission_0725_16.csv")
+mission_csv.to_csv(path + "sample_submission_0725_19.csv")
+
+print("===============")
+print("loss : ", loss[0])
+print("accuracy : ", round(loss[1], 3))
 
 '''
-32 16 16 16 16 1
-train_size=0.8, random_state=3434 / epochs=100, batch_size=16, validation_split=0.2
-acc score :  0.7709923664122137
-++++++++++++++++++++++++++++++
-MinMaxScaler / acc score :  0.7251908396946565
-StandardScaler / acc score :  0.732824427480916
+32 16 16 16 16 1 / train_size=0.8, random_state=3434 / epochs=100, batch_size=16
+                loss :  0.1539676934480667 / accuracy :  0.748
+MinMaxScaler > loss :  0.1426393687725067 / accuracy :  0.748 > 2
+StandardScaler > loss :  0.22998538613319397 / accuracy :  0.718
+MaxAbsScaler > loss :  0.12030860036611557 / accuracy :  0.794 > best
+RobustScaler > loss :  0.22415265440940857 / accuracy :  0.74
 '''

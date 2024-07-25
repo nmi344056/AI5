@@ -99,4 +99,5 @@ mission_csv.to_csv(path + "sample_submission_0722_1900.csv")
 32 16 16 16 16 1
 train_size=0.8, random_state=3434 / epochs=100, batch_size=16, validation_split=0.2
 acc score :  0.7709923664122137
+0.5만 나온다
 '''

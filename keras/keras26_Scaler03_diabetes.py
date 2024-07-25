@@ -18,13 +18,13 @@ print(x.shape, y.shape)          # (442, 10) (442,)
 
 #[실습]만들기 R2 성능 0.62 이상
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.79, random_state=999)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=999)
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 # scaler = MinMaxScaler()
-scaler = StandardScaler()
-# scaler = MaxAbsScaler()
+# scaler = StandardScaler()
+scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
 scaler.fit(x_train)
@@ -61,16 +61,10 @@ print("r2 sorce : ", r2)
 print("time : ", round(end - start, 2), "초")
 
 '''
-100 75 50 30 1 (0.79)
-random_state :  999 / 8000
-loss :  2237.555908203125
-r2 sorce :  0.5779882175127407
-++++++++++++++++++++++++++++++
-MinMaxScaler
-loss :  2159.610595703125
-r2 sorce :  0.5926890356739871
-++++++++++++++++++++++++++++++
-StandardScaler
-loss :  2069.511474609375
-r2 sorce :  0.6096820628864412
+100 75 50 30 1 / train_size=0.8, random_state=999 / epochs=100, batch_size=10
+                loss :  2159.803955078125 / r2 sorce :  0.6036334555474677
+MinMaxScaler > loss :  2125.1162109375 / r2 sorce :  0.6099993399059593 > 2
+StandardScaler > loss :  2133.20263671875 / r2 sorce :  0.60851531739284
+MaxAbsScaler > loss :  2088.937744140625 / r2 sorce :  0.6166388284587843 > best
+RobustScaler > loss :  2136.62158203125 / r2 sorce :  0.6078878932536853
 '''

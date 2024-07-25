@@ -54,12 +54,12 @@ y = train_csv['count']
 print(y)
 print(y.shape)              # (1328,)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.87, random_state=4343)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=4343)
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
-# scaler = MinMaxScaler()
-scaler = StandardScaler()
+scaler = MinMaxScaler()
+# scaler = StandardScaler()
 # scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
@@ -74,19 +74,18 @@ print(np.min(x_test), np.max(x_test))       # 0.0 1.0
 
 #2. 모델구성
 model = Sequential()
-model.add(Dense(100, input_shape=(9,)))
-model.add(Dense(30))
-model.add(Dense(500))
-model.add(Dense(30))
-model.add(Dense(100))
-model.add(Dense(30))
+model.add(Dense(126, input_shape=(9,)))
+model.add(Dense(64))
+model.add(Dense(32))
+model.add(Dense(32))
+model.add(Dense(32))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
 start = time.time()
 es = EarlyStopping(monitor='val_loss', mode='min', patience=50, restore_best_weights=True)
-hist = model.fit(x_train, y_train, epochs=500, batch_size=23, validation_split=0.2, callbacks=[es])
+hist = model.fit(x_train, y_train, epochs=500, batch_size=24, validation_split=0.2, callbacks=[es])
 end = time.time()
 
 #4. 평가, 예측
@@ -108,14 +107,16 @@ submission_csv['count'] = y_submit
 print(submission_csv)           # [715 rows x 1 columns]
 print(submission_csv.shape)     # (715, 1)
 
-submission_csv.to_csv(path + "submission_0725_1546.csv")
+submission_csv.to_csv(path + "submission_0725_18.csv")
 
 print("loss : ", loss)
+print("r2 score : ", r2)
 
 '''
-loss :  1878.3675537109375
-r2 score :  0.6863767599210737
-++++++++++++++++++++++++++++++
-MinMaxScaler    loss :  1865.7808837890625
-StandardScaler  loss :  1867.1558837890625
+126 64 32 32 32 1 / train_size=0.9, random_state=4343 / epochs=500, batch_size=24
+                loss :  1753.6702880859375 / r2 score :  0.6841434676973406
+MinMaxScaler > loss :  1637.28759765625 / r2 score :  0.7051053444572746 > best
+StandardScaler > loss :  1675.6771240234375 / r2 score :  0.6981909408225387
+MaxAbsScaler > loss :  1641.0303955078125 / r2 score :  0.7044312138913198 > 2
+RobustScaler > loss :  1651.0953369140625 / r2 score :  0.7026184262609562
 '''

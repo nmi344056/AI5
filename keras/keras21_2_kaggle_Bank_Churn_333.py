@@ -80,12 +80,14 @@ from sklearn.preprocessing import MinMaxScaler
 scalar=MinMaxScaler()
 x[:] = scalar.fit_transform(x[:])
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=1186)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=1866)
 
 #2. 모델구성
 model = Sequential()
 model.add(Dense(32, input_dim=10))
 model.add(Dense(64, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dense(128, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
@@ -94,15 +96,8 @@ model.add(Dense(1, activation='sigmoid'))
 #3. 컴파일, 훈련
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 start_time = time.time()
-es = EarlyStopping(             # arlyStopping 정의
-    monitor='val_loss', 
-    mode = 'min',               # 모르면 auto
-    patience=10,
-    restore_best_weights=True,
-)
-
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=512, validation_split=0.2, 
-                 callbacks=[es])
+es = EarlyStopping(monitor='val_loss', mode = 'min', patience=10, restore_best_weights=True,)
+hist = model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_split=0.2, callbacks=[es])
 end_time = time.time()
 
 #4. 평가, 예측
@@ -124,12 +119,9 @@ print(y_submit.shape)       # (110023, 1)
 
 y_submit = np.round(y_submit)
 mission_csv['Exited'] = y_submit
-mission_csv.to_csv(path + "sample_submission_0722_1900.csv")
+mission_csv.to_csv(path + "sample_submission_0722_19.csv")
 
 '''
-32 16 16 16 16 1
-train_size=0.8, random_state=3434 / epochs=100, batch_size=16, validation_split=0.2
-acc score :  0.7709923664122137
-++++++++++++++++++++++++++++++
-acc score :  0.8643924016117793
+32 64 128 128 128 64 32 1 / train_size=0.9, random_state=1866 / patience=10 / epochs=1000, batch_size=8
+loss :  0.3232889473438263 / accuracy :  0.866 > 0.75422
 '''

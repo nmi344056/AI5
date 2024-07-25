@@ -1,14 +1,15 @@
 # https://www.kaggle.com/competitions/playground-series-s4e1
 
+import numpy as np
+import pandas as pd
+import time
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import LabelEncoder
-import numpy as np
-import pandas as pd
-import time
 
 #1. 데이터
 path = "C:\\ai5\\_data\\kaggle\\playground-series-s4e1\\"
@@ -35,12 +36,39 @@ test_csv['Geography'] = encoder.fit_transform(test_csv['Geography'])
 train_csv['Gender'] = encoder.fit_transform(train_csv['Gender'])
 test_csv['Gender'] = encoder.fit_transform(test_csv['Gender'])
 
-x = train_csv.drop(['CustomerId', 'Surname', 'Exited'], axis=1)
+train_csv = train_csv.drop(['CustomerId', 'Surname'], axis=1)
+test_csv = test_csv.drop(['CustomerId', 'Surname'], axis=1)
+
+###############################################
+from sklearn.preprocessing import MinMaxScaler
+
+train_scaler = MinMaxScaler()
+
+train_csv_copy = train_csv.copy()
+
+train_csv_copy = train_csv_copy.drop(['Exited'], axis = 1)
+
+train_scaler.fit(train_csv_copy)
+
+train_csv_scaled = train_scaler.transform(train_csv_copy)
+
+train_csv = pd.concat([pd.DataFrame(data = train_csv_scaled), train_csv['Exited']], axis = 1)
+
+test_scaler = MinMaxScaler()
+
+test_csv_copy = test_csv.copy()
+
+test_scaler.fit(test_csv_copy)
+
+test_csv_scaled = test_scaler.transform(test_csv_copy)
+
+test_csv = pd.DataFrame(data = test_csv_scaled)
+###############################################
+
+x = train_csv.drop(['Exited'], axis=1)
 print(x)                            # [165034 rows x 10 columns]
 y = train_csv['Exited']
 print(y.shape)                      # (165034,)
-
-test_csv = test_csv.drop(['CustomerId', 'Surname'], axis=1)
 
 print(np.unique(y, return_counts=True))     
 # (array([0, 1], dtype=int64), array([130113,  34921], dtype=int64))
@@ -48,45 +76,43 @@ print(pd.DataFrame(y).value_counts())
 # 0         130113
 # 1          34921
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=6666)
+from sklearn.preprocessing import MinMaxScaler
+scalar=MinMaxScaler()
+x[:] = scalar.fit_transform(x[:])
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=1866)
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
-# scaler = MinMaxScaler()
-scaler = StandardScaler()
+scaler = MinMaxScaler()
+# scaler = StandardScaler()
 # scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
-test_csv = scaler.transform(test_csv)
 
 print(x_train)
-print(np.min(x_train), np.max(x_train))     # 0.0 1.0000000000000002
-print(np.min(x_test), np.max(x_test))       # 0.0 1.0000000000000002
+print(np.min(x_train), np.max(x_train))     # 
+print(np.min(x_test), np.max(x_test))       #
 
 #2. 모델구성
 model = Sequential()
-model.add(Dense(32, input_shape=(10,)))
+model.add(Dense(32, input_dim=10))
 model.add(Dense(64, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dense(128, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 
 #3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 start_time = time.time()
-es = EarlyStopping(             # arlyStopping 정의
-    monitor='val_loss', 
-    mode = 'min',               # 모르면 auto
-    patience=10,
-    restore_best_weights=True,
-)
-
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=30, validation_split=0.2, 
-                 callbacks=[es])
+es = EarlyStopping(monitor='val_loss', mode = 'min', patience=10, restore_best_weights=True,)
+hist = model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_split=0.2, callbacks=[es])
 end_time = time.time()
 
 #4. 평가, 예측
@@ -108,13 +134,25 @@ print(y_submit.shape)       # (110023, 1)
 
 y_submit = np.round(y_submit)
 mission_csv['Exited'] = y_submit
-mission_csv.to_csv(path + "sample_submission_0725_16.csv")
+mission_csv.to_csv(path + "sample_submission_0725_20.csv")
 
 '''
-32 16 16 16 16 1
-train_size=0.8, random_state=3434 / epochs=100, batch_size=16, validation_split=0.2
-acc score :  0.7709923664122137
-++++++++++++++++++++++++++++++
-MinMaxScaler / acc score :  0.8648165540642894
-StandardScaler / acc score :  0.8641500287817736
+32 64 128 128 128 64 32 1 / train_size=0.9, random_state=1866 / patience=10 / epochs=1000, batch_size=8
+loss :  0.3232889473438263 / accuracy :  0.866 > 0.75422
+
+MinMaxScaler
+loss :  0.324319988489151 / accuracy :  0.865 > 0.76166     > best
+loss :  0.3240274488925934 / accuracy :  0.864 > 0.75181
+
+StandardScaler
+loss :  0.3255990445613861 / accuracy :  0.863 > 0.5
+loss :  0.3251689076423645 / accuracy :  0.864 > 0.50021
+
+MaxAbsScaler
+loss :  0.3234576880931854 / accuracy :  0.865 > 0.75211    > 2
+loss :  0.323557585477829 / accuracy :  0.864 > 0.74549
+
+RobustScaler
+loss :  0.3243362009525299 / accuracy :  0.865 > 0.52306
+loss :  0.3238823115825653 / accuracy :  0.866 > 0.53181
 '''

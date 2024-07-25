@@ -30,8 +30,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y_ohe1, train_size=0.9, r
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 # scaler = MinMaxScaler()
-scaler = StandardScaler()
-# scaler = MaxAbsScaler()
+# scaler = StandardScaler()
+scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
 scaler.fit(x_train)
@@ -47,9 +47,8 @@ print(y_train.shape, y_test.shape)      # (142, 3) (36, 3)
 
 #2. 모델구성
 model = Sequential()
-model.add(Dense(32, activation='relu', input_shape=(13,)))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(16, activation='relu'))
+model.add(Dense(16, activation='relu', input_shape=(13,)))
+model.add(Dense(32, activation='relu'))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(16, activation='relu'))
@@ -72,10 +71,14 @@ print(y_predict[:20])
 accuracy_score = accuracy_score(y_test, y_predict)
 print("acc score : ", accuracy_score)
 
+print("===============")
+print("loss : ", round(loss[0], 7), "/ accuracy : ", round(loss[1], 3))
+
 '''
-acc score :  0.6388888888888888
-acc score :  1.0
-++++++++++++++++++++++++++++++
-MinMaxScaler / acc score :  1.0
-StandardScaler /acc score :  1.0
+16 32 16 16 16 3 / train_size=0.9, random_state=666 / epochs=100, batch_size=1
+                loss :  0.02061588503420353 / accuracy :  1.0
+MinMaxScaler > loss :  0.0001268 / accuracy :  1.0
+StandardScaler > loss :  0.0 / accuracy :  1.0
+MaxAbsScaler > loss :  0.0002199 / accuracy :  1.0
+RobustScaler > loss :  0.0 / accuracy :  1.0
 '''

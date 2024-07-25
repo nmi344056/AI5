@@ -22,9 +22,9 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 # scaler = MinMaxScaler()
-scaler = StandardScaler()
+# scaler = StandardScaler()
 # scaler = MaxAbsScaler()
-# scaler = RobustScaler()
+scaler = RobustScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -35,10 +35,11 @@ print(np.min(x_test), np.max(x_test))       # -0.005005005005005003 1.0
 
 #2. 모델구성
 model = Sequential()
-model.add(Dense(3, input_shape=(8,)))
-model.add(Dense(4))
-model.add(Dense(5))
-model.add(Dense(3))
+model.add(Dense(128, input_shape=(8,)))
+model.add(Dense(64))
+model.add(Dense(32))
+model.add(Dense(32))
+model.add(Dense(32))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
@@ -59,15 +60,10 @@ print("r2 score : ", r2)
 print("time : ", round(end - start, 2), "초")
 
 '''
-3 4 5 3 1
-train_size=0.7, random_state=123 / 
-loss :  0.588417649269104
-r2 score :  0.5550008546448328
-++++++++++++++++++++
-MinMaxScaler
-loss :  0.5419221520423889
-r2 score :  0.5901635730415427
-++++++++++++++++++++
-loss :  0.566265344619751
-r2 score :  0.5717537580098613
+128 64 32 32 32 1 / train_size=0.7, random_state=123 / epochs=100, batch_size=100
+                loss :  0.702932596206665 / r2 score :  0.4683970720451244
+MinMaxScaler > loss :  0.5462954044342041 / r2 score :  0.586856315595612
+StandardScaler > loss :  0.5269249081611633 / r2 score :  0.6015055763433855 > 2
+MaxAbsScaler > loss :  0.6288350820541382 / r2 score :  0.5244345163252213
+RobustScaler > loss :  0.5263957977294922 / r2 score :  0.6019057841014295 > best
 '''

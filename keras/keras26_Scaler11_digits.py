@@ -40,8 +40,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y_ohe1, train_size=0.9, r
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 # scaler = MinMaxScaler()
-scaler = StandardScaler()
-# scaler = MaxAbsScaler()
+# scaler = StandardScaler()
+scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
 scaler.fit(x_train)
@@ -81,12 +81,15 @@ print(y_predict[:20])
 accuracy_score = accuracy_score(y_test, y_predict)
 print("acc score : ", accuracy_score)
 
+print("loss : ", loss[0])
+print("accuracy : ", round(loss[1], 3))
+
 '''
-[실습] accuracy :  1.0
-128 256 256 256 128 10
-train_size=0.9, random_state=6666 / epochs=100, batch_size=100, validation_split=0.2
-acc score :  0.9888888888888889
-++++++++++++++++++++++++++++++
-MinMaxScaler / acc score :  0.9666666666666667
-StandardScaler / acc score :  0.9833333333333333
+[실습] accuracy :  1.0 이상
+128 256 256 256 128 10 / train_size=0.9, random_state=6666 / epochs=100, batch_size=100
+                loss :  0.18406151235103607 / accuracy :  0.978
+MinMaxScaler > loss :  0.141708105802536 / acc score :  0.967
+StandardScaler > loss :  0.07601241767406464 / accuracy :  0.978 > best
+MaxAbsScaler > loss :  0.13402174413204193 / accuracy :  0.978 > 2
+RobustScaler > loss :  0.15929929912090302 / accuracy :  0.978
 '''

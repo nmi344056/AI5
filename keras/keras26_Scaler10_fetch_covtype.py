@@ -46,7 +46,7 @@ print(y_ohe.shape)                 # (581012, 7)
 # print(y_ohe)
 # print(y_ohe.shape)                 # (581012, 7)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y_ohe, train_size=0.5, random_state=6666,
+x_train, x_test, y_train, y_test = train_test_split(x, y_ohe, train_size=0.9, random_state=6666,
                                                     stratify=y)
 
 # print(pd.value_counts(y_train))
@@ -61,20 +61,20 @@ x_train, x_test, y_train, y_test = train_test_split(x, y_ohe, train_size=0.5, ra
 print(x_train.shape, x_test.shape)      # (522910, 54) (58102, 54)
 print(y_train.shape, y_test.shape)      # (522910, 8) (58102, 8)
 
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from sklearn.preprocessing import MaxAbsScaler, RobustScaler
+# from sklearn.preprocessing import MinMaxScaler, StandardScaler
+# from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 # scaler = MinMaxScaler()
-scaler = StandardScaler()
+# scaler = StandardScaler()
 # scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
+# scaler.fit(x_train)
+# x_train = scaler.transform(x_train)
+# x_test = scaler.transform(x_test)
 
-print(x_train)
-print(np.min(x_train), np.max(x_train))     # 0.0 1.0
-print(np.min(x_test), np.max(x_test))       # -0.009150326797385616 1.0026143790849673
+# print(x_train)
+# print(np.min(x_train), np.max(x_train))     # 0.0 1.0
+# print(np.min(x_test), np.max(x_test))       # -0.009150326797385616 1.0026143790849673
 
 #2. 모델구성
 model = Sequential()
@@ -103,8 +103,20 @@ accuracy_score = accuracy_score(y_test, y_predict)
 print("acc score : ", accuracy_score)
 
 '''
-128 256 256 256 126 8
-train_size=0.9, random_state=6666 / epochs=100, batch_size=300, validation_split=0.2
+128 256 256 256 126 8 / train_size=0.9, random_state=6666 / epochs=100, batch_size=300, validation_split=0.2
+
+MinMaxScaler > 
+
+StandardScaler > 
+
+MaxAbsScaler > 
+
+RobustScaler > 
+
+
+
+
+
 acc score :  0.9335478985232867
 ++++++++++++++++++++++++++++++
 MinMaxScaler / acc score :  0.9406655972682147

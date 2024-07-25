@@ -64,11 +64,11 @@ print(np.min(x_test), np.max(x_test))       # 0.0 1.017298281552293
 
 #2. 모델구성
 model = Sequential()
-model.add(Dense(64, activation='relu', input_shape=(8,)))
+model.add(Dense(128, activation='relu', input_shape=(8,)))
+model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(8, activation='relu'))
-model.add(Dense(4, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(32, activation='relu'))
 model.add(Dense(1, activation='linear'))
 
 #3. 컴파일, 훈련
@@ -97,14 +97,16 @@ sampleSubmission['count'] = y_submit
 print(sampleSubmission)               # [6493 rows x 1 columns]
 print(sampleSubmission.shape)         # (6493, 1)
 
-sampleSubmission.to_csv(path + "sampleSubmission_0725_15.csv")
+sampleSubmission.to_csv(path + "sampleSubmission_0725_18.csv")
 
 print("loss : ", loss)
+print("re score : ", r2)
 
 '''
-loss :  20441.990234375
-re score :  0.3785893249832102
-++++++++++++++++++++++++++++++
-MinMaxScaler    loss :  20456.990234375
-StandardScaler  loss :  20342.875
+128 64 32 32 32 1 / train_size=0.85, random_state=111 / epochs=500, batch_size=100
+                loss :  20785.33984375 / re score :  0.3681519596925723
+MinMaxScaler > loss :  20427.791015625 / re score :  0.37902104167418216
+StandardScaler > loss :  19944.01953125 / re score :  0.39372694479331316 > best
+MaxAbsScaler > loss :  20247.828125 / re score :  0.3844916548621592
+RobustScaler > loss :  20123.330078125 / re score :  0.38827620559028675 > 2
 '''

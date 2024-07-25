@@ -55,8 +55,6 @@ x[:] = scalar.fit_transform(x[:])
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=1866)
 
-x_test = x_test[:] = scalar.fit_transform(x_test[:])
-
 #2. 모델구성
 model = Sequential()
 model.add(Dense(32, input_dim=10))
@@ -71,15 +69,8 @@ model.add(Dense(1, activation='sigmoid'))
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 start_time = time.time()
-es = EarlyStopping(             # arlyStopping 정의
-    monitor='val_loss', 
-    mode = 'min',               # 모르면 auto
-    patience=10,
-    restore_best_weights=True,
-)
-
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_split=0.2, 
-                 callbacks=[es])
+es = EarlyStopping(monitor='val_loss', mode = 'min', patience=10, restore_best_weights=True,)
+hist = model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_split=0.2, callbacks=[es])
 end_time = time.time()
 
 #4. 평가, 예측
@@ -88,28 +79,36 @@ print("loss : ", loss[0])
 print("accuracy : ", round(loss[1], 3))
 
 y_predict = model.predict(x_test)
-print(y_predict[:20])       # y' 결과
+print(y_predict[:20])               # y' 결과
 y_predict = np.round(y_predict)
-print(y_predict[:20])       # y' 반올림 결과
+print(y_predict[:20])               # y' 반올림 결과
 
 accuracy_score = accuracy_score(y_test, y_predict)
 print("acc score : ", accuracy_score)
 print("time : ", round(end_time - start_time, 2), "초")
 
 y_submit = model.predict(test_csv)
-print(y_submit.shape)       # (110023, 1)
+print(y_submit.shape)               # (110023, 1)
 
 y_submit = np.round(y_submit)
 mission_csv['Exited'] = y_submit
-mission_csv.to_csv(path + "sample_submission_0722_1900.csv")
+mission_csv.to_csv(path + "sample_submission_0722_19.csv")
 
 '''
-32 16 16 16 16 1
-train_size=0.8, random_state=3434 / epochs=100, batch_size=16, validation_split=0.2
-acc score :  0.7709923664122137
+32 64 128 128 128 64 32 1 / train_size=0.9, random_state=1866 / patience=10 / epochs=1000, batch_size=8
+loss :  0.09958957880735397 / accuracy :  0.863 > 0.49996
+
+32 16 16 16 16 1 / train_size=0.8, random_state=3434 / patience=10 / epochs=100, batch_size=16
+loss :  0.09855161607265472 / accuracy :  0.867 > 0.41899
 
 ++++++++++++++++++++++++++++++
 random_state=6666
 random_state=1866
 random_state=1186
+
+
+
+
+
+
 '''
