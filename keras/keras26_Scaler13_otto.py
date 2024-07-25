@@ -78,6 +78,22 @@ print(pd.value_counts(y, sort=False))   # 동일하게 나온다, 컴퓨터가 �
 
 x_train, x_test, y_train, y_test = train_test_split(x, y_ohe, train_size=0.9, random_state=3, stratify=y)
 
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler
+# scaler = MinMaxScaler()
+scaler = StandardScaler()
+# scaler = MaxAbsScaler()
+# scaler = RobustScaler()
+
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+test_csv = scaler.transform(test_csv)
+
+print(x_train)
+print(np.min(x_train), np.max(x_train))     # 0.0 1.0
+print(np.min(x_test), np.max(x_test))       # 0.0 1.75
+
 #2. 모델 구성
 model = Sequential()
 model.add(Dense(128, activation='relu', input_dim=93))
@@ -124,4 +140,7 @@ submission_csv.to_csv(path + "sampleSubmission_0724_20.csv")
 256 128 64 64 64 9 / 7777 / epochs=500, batch_size=100 / loss : [0.5333549976348877, 0.8005817532539368] > 5.38862
 256 128 128 64 64 64 9 / 433 / epochs=500, batch_size=50 / loss : [0.501552402973175, 0.8070458769798279] > 5.35226
 128 256 512 1024 512 256 128 64 9  / 3 / epochs=500, batch_size=60 / loss : [0.5428007245063782, 0.802359402179718] > 5.42862
+++++++++++++++++++++++++++++++
+MinMaxScaler / 128 256 512 1024 512 256 128 64 9  / 3 / epochs=500, batch_size=60 / loss : [0.5463241934776306, 0.7971881031990051] > 5.40218
+StandardScaler / 128 256 512 1024 512 256 128 64 9  / 3 / epochs=500, batch_size=60 / loss : [0.5416991114616394, 0.8057530522346497] > 
 '''
