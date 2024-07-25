@@ -1,3 +1,5 @@
+# keras22_softmax3_fetch_covtype copy
+
 from sklearn.datasets import fetch_covtype
 import numpy as np
 import pandas as pd
@@ -28,6 +30,21 @@ print(pd.value_counts(y))
 
 x_train, x_test, y_train, y_test = train_test_split(x, y_ohe, test_size=0.1, random_state=5353)
 
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler
+# scaler = MinMaxScaler()
+# scaler = StandardScaler()
+# scaler = MaxAbsScaler()
+scaler = RobustScaler()
+
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+
+
+print('x_train :', x_train)
+print(np.min(x_train), np.max(x_train))
+print(np.min(x_test), np.max(x_test))
 
 #2. 모델 구성
 model = Sequential()
@@ -84,4 +101,28 @@ acc_score : 0.92077725379505
 걸린 시간 : 466.28 초
 """
 
+# MinMaxScaler 적용
+# loss : 0.14127600193023682
+# acc : 0.97
+# r2 score : 0.9343391961683192
+# acc_score : 0.9555555555555556
 
+# StandardScaler
+# loss : 0.13319317996501923
+# acc : 0.9486
+# r2 score : 0.849960627497632
+# acc_score : 0.947884754397439
+
+# MaxAbsScaler
+# loss : 0.1533125638961792
+# acc : 0.9402
+# r2 score : 0.8347796292779198
+# acc_score : 0.9390726653127259
+# 걸린 시간 : 461.15 초
+
+# RobustScaler
+# loss : 0.13072569668293
+# acc : 0.9514
+# r2 score : 0.8596564469031069
+# acc_score : 0.9509655433547899
+# 걸린 시간 : 548.91 초

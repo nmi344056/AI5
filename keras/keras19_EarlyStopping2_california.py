@@ -1,3 +1,5 @@
+
+import numpy as np
 import sklearn as sk
 from sklearn.datasets import fetch_california_housing
 from tensorflow.keras.models import Sequential
@@ -21,6 +23,7 @@ print('x_train :', x_train)
 print('x_test :', x_test)
 print('y_train :', y_train)
 print('y_test :', y_test)
+
 
 #2. 모델구성
 model = Sequential()
@@ -81,4 +84,3 @@ plt.xlabel('epochs')
 plt.ylabel('loss')
 plt.grid()
 plt.show()
-

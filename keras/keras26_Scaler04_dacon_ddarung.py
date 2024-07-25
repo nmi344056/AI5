@@ -1,3 +1,5 @@
+# keras19_EarlyStopping4_dacon_ddarung copy
+
 # https://dacon.io/competitions/open/235576/overview/description
 
 import numpy as np
@@ -60,6 +62,25 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.9822,
                                                     random_state= 5757)
 
 
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler
+# scaler = MinMaxScaler()
+# scaler = StandardScaler()
+# scaler = MaxAbsScaler()
+scaler = RobustScaler()
+
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+test_csv = scaler.transform(test_csv)
+
+print('x_train :', x_train)
+print(np.min(x_train), np.max(x_train))
+print(np.min(x_test), np.max(x_test))
+
+
 #2. 모델구성
 model = Sequential()
 model.add(Dense(10, input_dim=9))
@@ -116,6 +137,22 @@ print("걸린시간 :", round(end-start,2),"초")
 # plt.grid()          #모눈종이
 # plt.show()
 
-# 로스 : 934.037109375
-# r2스코어 : 0.8602612354104815
-# 걸린시간 : 4.9 초
+# MinMaxScaler
+# 로스 : 1176.9427490234375
+# r2스코어 : 0.8239208138560189
+# 걸린시간 : 2.25 초
+
+# StandardScaler
+# 로스 : 1124.8985595703125
+# r2스코어 : 0.8317069934221893
+# 걸린시간 : 1.02 초
+
+# MaxAbsScaler
+# 로스 : 1123.9234619140625
+# r2스코어 : 0.8318528481008873
+# 걸린시간 : 2.28 초
+
+#RobustScaler
+# 로스 : 1046.8455810546875
+# r2스코어 : 0.8433842708143588
+# 걸린시간 : 1.1 초

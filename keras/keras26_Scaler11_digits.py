@@ -1,3 +1,5 @@
+# keras22_softmax4_digits copy
+
 from sklearn.datasets import load_digits
 import numpy as np
 import pandas as pd
@@ -32,6 +34,21 @@ y_ohe = pd.get_dummies(y)
 print(y_ohe.shape)          # (1797, 10)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y_ohe, test_size=0.1, random_state=7777, stratify=y)
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler
+# scaler = MinMaxScaler()
+# scaler = StandardScaler()
+# scaler = MaxAbsScaler()
+scaler = RobustScaler()
+
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+
+print('x_train :', x_train)
+print(np.min(x_train), np.max(x_train))
+print(np.min(x_test), np.max(x_test))
 
 #2. 모델 구성
 model = Sequential()
@@ -76,11 +93,33 @@ accuracy_score = accuracy_score(y_test,np.round(y_pre))
 print('acc_score :', accuracy_score)
 print('걸린 시간 :', round(end-start, 2), '초')
 
-# epochs=5000, batch_size=1
-# random_state=7777
-# loss : 0.027419203892350197
-# acc : 0.99
-# r2 score : 0.989750870428856
-# acc_score : 0.9944444444444445
-# 걸린 시간 : 177.92 초
+# loss : 0.3699270486831665
+# acc : 0.97
+# r2 score : 0.9288326628426031
+# acc_score : 0.9555555555555556
 
+# MinMaxScaler
+# loss : 0.17720025777816772
+# acc : 0.97
+# r2 score : 0.9420570467927567
+# acc_score : 0.9722222222222222
+
+# StandardScaler
+# loss : 0.21652619540691376
+# acc : 0.97
+# r2 score : 0.9322739459512247
+# acc_score : 0.95
+
+# MaxAbsScaler
+# loss : 0.1809525340795517
+# acc : 0.96
+# r2 score : 0.9349427369695376
+# acc_score : 0.9555555555555556
+# 걸린 시간 : 180.46 초
+
+# RobustScaler
+# loss : 0.17991632223129272
+# acc : 0.97
+# r2 score : 0.9352906434458619
+# acc_score : 0.9666666666666667
+# 걸린 시간 : 244.07 초

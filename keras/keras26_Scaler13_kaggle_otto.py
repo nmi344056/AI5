@@ -1,3 +1,5 @@
+# keras23_kaggle2_otto copt
+
 # 과제  acc=0.89이상 만들어서 제출 캡쳐 이메일로 전송
 # https://www.kaggle.com/competitions/otto-group-product-classification-challenge/data
 
@@ -41,8 +43,24 @@ print(y.shape)
 y_ohe = pd.get_dummies(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y_ohe,train_size=0.8,
-                                                    random_state=777,
+                                                    random_state=3752,
                                                     stratify=y)
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler
+# scaler = MinMaxScaler()
+# scaler = StandardScaler()
+# scaler = MaxAbsScaler()
+scaler = RobustScaler()
+
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+test_csv = scaler.transform(test_csv)
+
+print('x_train :', x_train)
+print(np.min(x_train), np.max(x_train))
+print(np.min(x_test), np.max(x_test))
 
 #2. 모델구성
 model = Sequential()
@@ -105,7 +123,23 @@ submission_csv[['Class_1', 'Class_2', 'Class_3', 'Class_4', 'Class_5', 'Class_6'
 #     submission_csv['Class_' + str(i+1)] = y_submit[:,i].astype('int')
 
 
-submission_csv.to_csv(path + "submission_0725_1233.csv")
+submission_csv.to_csv(path + "submission_0725_1620.csv")
 
 print('로스 :', loss)
 print("acc :", round(loss[1],3))
+
+# MinMaxScaler
+# 로스 : [0.541971743106842, 0.7923400402069092]
+# acc : 0.792
+
+# StandardScaler
+# 로스 : [0.5397934913635254, 0.7953296899795532]
+# acc : 0.795
+
+# MaxAbsScaler
+# 로스 : [0.5393970012664795, 0.7954104542732239]
+# acc : 0.795
+
+# RobusterScaler
+# 로스 : [0.5412541031837463, 0.7942792773246765]
+# acc : 0.794

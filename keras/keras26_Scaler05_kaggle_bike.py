@@ -1,5 +1,7 @@
 # https://www.kaggle.com/competitions/bike-sharing-demand/data?select=train.csv
 
+# keras19_EarlyStopping5_kaggle_bike copy
+
 import numpy as np
 import pandas as pd
 from tensorflow.keras.models import Sequential
@@ -63,6 +65,23 @@ print(y.shape)      #(10886,)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.9,
                                                     random_state = 68481)
+
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler
+# scaler = MinMaxScaler()
+# scaler = StandardScaler()
+# scaler = MaxAbsScaler()
+scaler = RobustScaler()
+
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+test_csv = scaler.transform(test_csv)
+
+print('x_train :', x_train)
+print(np.min(x_train), np.max(x_train))
+print(np.min(x_test), np.max(x_test))
 
 #2. 모델구성
 model = Sequential()
@@ -130,9 +149,9 @@ r2 = r2_score(y_test, y_predict)
 print("r2 스코어 :", r2)
 print("걸린시간 :", round(end-start,2),"초")
 
-y_submit = model.predict(test_csv)
-print(y_submit)
-print(y_submit.shape)
+# y_submit = model.predict(test_csv)
+# print(y_submit)
+# print(y_submit.shape)
 
 # sampleSubmission['count'] = y_submit
 # print(sampleSubmission)         # [6493 rows x 1 columns]
@@ -140,8 +159,8 @@ print(y_submit.shape)
 
 # sampleSubmission.to_csv(path + "sampleSubmission_0718_1202.csv")
 
-print('로스 :', loss)
-print("r2 스코어 :", r2)
+# print('로스 :', loss)
+# print("r2 스코어 :", r2)
 
 # print("============================= hist =========================")
 # print(hist)
@@ -165,5 +184,21 @@ print("r2 스코어 :", r2)
 # plt.grid()      # 모눈종이
 # plt.show()
 
-# 로스 : 21621.1328125
-# r2 스코어 : 0.2923651071556407
+# MinMaxScaler
+# 로스 : 20420.76171875
+# r2 스코어 : 0.33165183632183315
+
+# StandarScaler
+# 로스 : 20845.5703125
+# r2 스코어 : 0.3177483414452339
+# 걸린시간 : 13.9 초
+
+# MaxAbsScaler
+# 로스 : 20386.029296875
+# r2 스코어 : 0.33278865640596533
+# 걸린시간 : 25.32 초
+
+#RobustScaler
+# 로스 : 20957.90625
+# r2 스코어 : 0.31407169972826665
+# 걸린시간 : 13.35 초
