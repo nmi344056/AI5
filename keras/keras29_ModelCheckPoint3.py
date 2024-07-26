@@ -1,4 +1,4 @@
-# [복사] keras28_1.py
+# [복사] keras29_1.py
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -36,12 +36,14 @@ es  = EarlyStopping(monitor='val_loss', mode='min', patience=10, verbose=1, rest
 mcp = ModelCheckpoint(monitor='val_loss', mode='auto',
                       verbose=1,
                       save_best_only=True,
-                      filepath='./_save/keras29_mcp/keras29_mcp1.hdf5'
+                      filepath='./_save/keras29_mcp/keras29_mcp3.hdf5'
                       )
 
 start = time.time()
 hist = model.fit(x_train, y_train, epochs=1000, batch_size=10, validation_split=0.2, callbacks=[es, mcp])
 end = time.time()
+
+model.save('./_save/keras29_mcp/keras29_3_save_model.hdf5')
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -52,11 +54,8 @@ r2 = r2_score(y_test, y_predict)
 print("r2 score : ", r2)
 print("time : ", round(end - start, 2), "초")
 
-# '''
-# 32 16 16 16 1 / train_size=0.7, random_state=555 / epochs=500, batch_size=10
-#                 loss :  23.239059448242188 / r2 score :  0.7301424718220688
-# MinMaxScaler > loss :  20.770709991455078 / r2 score :  0.7588055105996
-# StandardScaler > loss :  20.400049209594727 / r2 score :  0.7631097044958196 > best
-# MaxAbsScaler > loss :  22.515735626220703 / r2 score :  0.7385418668215343
-# RobustScaler > loss :  20.481996536254883 / r2 score :  0.7621581380586453 >2
-# '''
+'''
+loss :  24.317855834960938
+r2 score :  0.7176152349757086
+time :  4.5 초
+'''
