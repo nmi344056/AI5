@@ -1,10 +1,10 @@
-# keras25_input_shape.py copy
+# keras26_Scaler01_boston copy
 
 import numpy as np
 import sklearn as sk
 print(sk.__version__)   # 0.24.2
 from sklearn.datasets import load_boston
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, load_model  # 로드 모델
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
@@ -51,21 +51,29 @@ print(np.min(x_test), np.max(x_test))
 # print('y_test :', y_test)
 
 
-#2. 모델구성
-model = Sequential()
-# model.add(Dense(10, input_dim=13))
-model.add(Dense(10, input_shape=(13,)))   # input_shape 는 벡터형태로  # 이미지 input_shape=(8,8,1)
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(1))
+# #2. 모델구성
+# model = Sequential()
+# # model.add(Dense(10, input_dim=13))
+# model.add(Dense(10, input_shape=(13,)))   # input_shape 는 벡터형태로  # 이미지 input_shape=(8,8,1)
+# model.add(Dense(5))
+# model.add(Dense(1))
+
+# model.summary()
+
+# model.save("./_save/keras28/keras28_1_save_model.h5")
+
+model = load_model('./_save/keras28/keras28_1_save_model.h5')
+
+model.summary()
+
+# 모델만 저장( 아직 가중치 저장 아님)
+
+
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
 start = time.time()
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=32,
+hist = model.fit(x_train, y_train, epochs=10, batch_size=32,
           validation_split=0.2)
 end = time.time()
 

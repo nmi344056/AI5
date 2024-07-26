@@ -1,10 +1,10 @@
-# keras25_input_shape.py copy
+# keras28_1_save_model copy
 
 import numpy as np
 import sklearn as sk
 print(sk.__version__)   # 0.24.2
 from sklearn.datasets import load_boston
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
@@ -51,23 +51,49 @@ print(np.min(x_test), np.max(x_test))
 # print('y_test :', y_test)
 
 
-#2. 모델구성
-model = Sequential()
-# model.add(Dense(10, input_dim=13))
-model.add(Dense(10, input_shape=(13,)))   # input_shape 는 벡터형태로  # 이미지 input_shape=(8,8,1)
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(1))
+# #2. 모델구성
+# model = Sequential()
+# # model.add(Dense(10, input_dim=13))
+# model.add(Dense(32, input_shape=(13,)))   # input_shape 는 벡터형태로  # 이미지 input_shape=(8,8,1)
+# model.add(Dense(32, activation='relu'))
+# model.add(Dense(16, activation='relu'))
+# model.add(Dense(16, activation='relu'))
+# model.add(Dense(1))
 
-#3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam')
-start = time.time()
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=32,
-          validation_split=0.2)
-end = time.time()
+# model.summary()
+
+# # model.save("./_save/keras28/keras28_1_save_model.h5")   # 상대경로
+# model.save("c:/AI5/_save/keras28/keras28_1_save_model.h5")   # 절대경로
+
+
+# 그 모델의 가장 성능이 좋은 지점을 저장한다.
+
+# #3. 컴파일, 훈련
+# model.compile(loss='mse', optimizer='adam')
+
+# from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+# es = EarlyStopping(monitor='val_loss', mode='min',
+#                    patience=10, verbose=1,
+#                    restore_best_weights=True
+#                    )
+# mcp = ModelCheckpoint(
+#     monitor='val_loss',
+#     mode='auto',
+#     verbose = 1,
+#     save_best_only=True,
+#     filepath = './_save/keras29_mcp/keras29_mcp1.hdf5'
+# )
+
+
+# start = time.time()
+# hist = model.fit(x_train, y_train, epochs=100, batch_size=32,
+#           verbose=1,
+#           validation_split=0.2,
+#           callbacks=[es, mcp]
+#           )
+# end = time.time()
+
+model = load_model('./_save/keras29_mcp/keras29_mcp1.hdf5')
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -120,3 +146,9 @@ print('로스 : ', loss)
 # MM scaler 로스 :  20.29813003540039
 # MAxAbsScaler 로스 : 18.711856842041016
 # RobustScaler 로스 :  18.9057559967041
+
+
+# ModelCheckpoint
+# 로스 :  8.478630065917969
+# r2스코어 :  0.9318442053653067
+# 걸린시간 :  2.54 초
