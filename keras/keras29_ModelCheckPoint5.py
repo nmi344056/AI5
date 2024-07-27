@@ -32,7 +32,7 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es  = EarlyStopping(monitor='val_loss', mode='min', patience=10, verbose=1, restore_best_weights=True,)
+es = EarlyStopping(monitor='val_loss', mode='min', patience=10, verbose=1, restore_best_weights=True,)
 
 ########## mcp 세이브 파일명 만들기 시작 ##########
 import datetime
@@ -45,8 +45,8 @@ print(date)             # 0726_1654
 print(type(date))       # <class 'str'>
 
 path = './_save/keras29_mcp2/'
-filename = '{epoch:04d}-{val_loss:.4f}.hdf5'    # 1000-0.7777.hdf5
-filepath = "".join([path, 'k29_', date, '_', filename])    # "./_save/keras29_mcp/k29_1000-0.7777.hdf5"
+filename = '{epoch:04d}-{val_loss:.4f}.hdf5'                # 1000-0.7777.hdf5
+filepath = "".join([path, 'k29_', date, '_', filename])     # "./_save/keras29_mcp/k29_1000-0.7777.hdf5"
 
 ########## mcp 세이브 파일명 만들기 끝 ##########
 
