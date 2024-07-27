@@ -1,121 +1,67 @@
-# keras28_1_save_model copy
-
-import numpy as np
-import sklearn as sk
-print(sk.__version__)   # 0.24.2
-from sklearn.datasets import load_boston
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler, RobustScaler
+from sklearn.metrics import r2_score, accuracy_score
+from sklearn.datasets import load_boston
+import numpy as np
 import time
 
 #1. 데이터
 dataset = load_boston()
-print(dataset)
-print(dataset.DESCR)   # DESCR = pandas 의 describe
-print(dataset.feature_names)
-# ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO'
-#  'B' 'LSTAT']
-
 x = dataset.data
 y = dataset.target
 
-print(x)
-print(x.shape)      #(506, 13)    --> input_dim=13
-print(y)
-print(y.shape)      #(506,)  벡터
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=555)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9,
-                                                    random_state=6666)
+scaler = StandardScaler()
 
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from sklearn.preprocessing import MaxAbsScaler, RobustScaler
-# scaler = MinMaxScaler()
-# scaler = StandardScaler()
-# scaler = MaxAbsScaler()
-scaler = RobustScaler()
-
-# scaler.fit(x_train)
-# x_train = scaler.transform(x_train)
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
-print('x_train :', x_train)
-print(np.min(x_train), np.max(x_train))
-print(np.min(x_test), np.max(x_test))
-
-
-# print('x_test :', x_test)
-# print('y_train :', y_train)
-# print('y_test :', y_test)
-
-
 # #2. 모델구성
 # model = Sequential()
-# # model.add(Dense(10, input_dim=13))
-# model.add(Dense(32, input_shape=(13,)))   # input_shape 는 벡터형태로  # 이미지 input_shape=(8,8,1)
-# model.add(Dense(32, activation='relu'))
-# model.add(Dense(16, activation='relu'))
-# model.add(Dense(16, activation='relu'))
+# model.add(Dense(32, input_shape=(13,)))
+# model.add(Dense(16))
+# model.add(Dense(16))
+# model.add(Dense(16))
 # model.add(Dense(1))
 
-# model.summary()
-
-# # model.save("./_save/keras28/keras28_1_save_model.h5")   # 상대경로
-# model.save("c:/AI5/_save/keras28/keras28_1_save_model.h5")   # 절대경로
-
-
-# 그 모델의 가장 성능이 좋은 지점을 저장한다.
-
-# #3. 컴파일, 훈련
+#3. 컴파일, 훈련
 # model.compile(loss='mse', optimizer='adam')
 
-# from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-# es = EarlyStopping(monitor='val_loss', mode='min',
-#                    patience=10, verbose=1,
-#                    restore_best_weights=True
-#                    )
-# mcp = ModelCheckpoint(
-#     monitor='val_loss',
-#     mode='auto',
-#     verbose = 1,
-#     save_best_only=True,
-#     filepath = './_save/keras29_mcp/keras29_mcp1.hdf5'
-# )
-
+# es = EarlyStopping(monitor='val_loss', mode='min', patience=50, verbose=1, restore_best_weights=True,)
+# mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, save_best_only=True, filepath=filepath)
 
 # start = time.time()
-# hist = model.fit(x_train, y_train, epochs=100, batch_size=32,
-#           verbose=1,
-#           validation_split=0.2,
-#           callbacks=[es, mcp]
-#           )
-# end = time.time
-
-print("======================= 2. MCP 출력 ========================")
-model = load_model('./_save/keras30_mcp/01_boston/k30_0726_1752_0098-15.2806.hdf5')
-
+# hist = model.fit(x_train, y_train, epochs=500, batch_size=10, validation_split=0.2, callbacks=[es, mcp])
+# end = time.time()
 
 #4. 평가, 예측
-loss = model.evaluate(x_test, y_test, verbose=0)
-print('로스 : ', loss)
+print('========== 2. mcp 출력 ==========')
+model = load_model('./_save/keras30_mcp/k30_01_boston_date_0726.2040_epo_0032_valloss_17.7942.hdf5')
+loss = model.evaluate(x_test, y_test, verbose=1)
+print("loss : ", loss)
 
 y_predict = model.predict(x_test)
 r2 = r2_score(y_test, y_predict)
-print("r2스코어 : ", r2)
+print("r2 score : ", r2)
 
+'''
+32 16 16 16 1 / train_size=0.7, random_state=555 / epochs=500, batch_size=10
 
-print('로스 : ', loss)
+========== save ==========
+Epoch 82/500
+ 1/33 [..............................] - ETA: 0s - loss: 14.2641Restoring model weights from the end of the best epoch: 32.
 
-# ModelCheckpoint
-# 로스 :  8.478630065917969
-# r2스코어 :  0.9318442053653067
-# 걸린시간 :  2.54 초
+Epoch 00082: val_loss did not improve from 17.79425
+33/33 [==============================] - 0s 750us/step - loss: 25.9872 - val_loss: 20.2842
+Epoch 00082: early stopping
+4/4 [==============================] - 0s 333us/step - loss: 18.4880
+loss :  18.48796844482422
+r2 score :  0.7653534998534318
 
-# ======================= 1. save.model 출력 ========================
-# 로스 :  11.00588607788086
-# r2스코어 :  0.9115287661927284
-# ======================= 2. MCP 출력 ========================
-# 로스 :  11.00588607788086
-# r2스코어 :  0.9115287661927284
+========== mcp 출력 ==========
+loss :  18.48796844482422
+r2 score :  0.7653534998534318
+'''

@@ -2,31 +2,33 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 import numpy as np
 
-#1. 데이타
+#1. 데이터
 x = np.array([1,2,3,4,5])
 y = np.array([1,2,4,3,5])
 
-#2. 모델구성
+#[실습] 직접작성
+
+#2. 모델 구성
 model = Sequential()
 model.add(Dense(1, input_dim=1))
 
-#3. 컴파일, 훈련
-epochs = 2060
+epochs = 2000            #튜닝
+#3. 컴파일 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x, y, epochs = epochs)
+model.fit(x, y, epochs=epochs)
 
 #4. 평가, 예측
 loss = model.evaluate(x, y)
-print("=============================")
-print("epochs = ", epochs)
-print("로스 : ", loss)
+print("====================")
+print("epochs : ",epochs)
+print("loss : ", loss)
 result = model.predict([6])
-print("6의 예측값 : ", result)
+print("[6]의 예측값 : ", result)
 
-# 로스 :  0.3805999755859375
-# 로스 :  0.3812914788722992
-# 6의 예측값 :  [[5.6273894]]
-# 로스 :  0.38028597831726074
-# 6의 예측값 :  [[5.728655]]
-# 로스 :  0.3945372998714447
-# 6의 예측값 :  [[5.903086]]
+"""
+5. 결과값 기록
+epochs :  1000
+로스 :  0.38007014989852905
+[6]의 예측값 :  [[5.713788]]
+
+"""
