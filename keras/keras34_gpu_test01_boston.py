@@ -1,11 +1,30 @@
-# keras28_1_save_model copy
+# 01 부터 13까지 쭉 카피해서
+
+# gpu일때와 cpu일때의 시간을 체크해서 비교할것
+
+import tensorflow as tf
+print(tf.__version__)       # 2.7.4
+
+gpus = tf.config.experimental.list_physical_devices('GPU')
+print(gpus)
+# [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+
+if(gpus):
+    print("쥐피유 돈다!!!")
+else:
+    print("쥐피유 없다! xxxxx")
+
+
+# 과적합이 문제다
+
+# keras29_MCP5 copy
 
 import numpy as np
 import sklearn as sk
 print(sk.__version__)   # 0.24.2
 from sklearn.datasets import load_boston
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Dropout, Input
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 import time
@@ -33,8 +52,8 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 # scaler = MinMaxScaler()
 # scaler = StandardScaler()
-# scaler = MaxAbsScaler()
-scaler = RobustScaler()
+scaler = MaxAbsScaler()
+# scaler = RobustScaler()
 
 # scaler.fit(x_train)
 # x_train = scaler.transform(x_train)
@@ -51,19 +70,39 @@ print(np.min(x_test), np.max(x_test))
 # print('y_test :', y_test)
 
 
-#2. 모델구성
-model = Sequential()
-# model.add(Dense(10, input_dim=13))
-model.add(Dense(32, input_shape=(13,)))   # input_shape 는 벡터형태로  # 이미지 input_shape=(8,8,1)
-model.add(Dense(32, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(1))
+# #2. 모델구성
+# model = Sequential()
+# # model.add(Dense(10, input_dim=13))
+# model.add(Dense(32, input_shape=(13,)))   # input_shape 는 벡터형태로  # 이미지 input_shape=(8,8,1)
+# model.add(Dropout(0.3))
+# model.add(Dense(32, activation='relu'))
+# model.add(Dropout(0.3))                    # 0.3 = 30퍼센트 빼고 훈련할거에요
+# model.add(Dense(16, activation='relu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(16, activation='relu'))
+# model.add(Dropout(0.1))
+
+# model.add(Dense(1))
+
+# model.summary()
+
+# 함수형
+input1 = Input(shape=(13,))
+dense1 = Dense(32, name='ys1')(input1)
+drop1 = Dropout(0.3)(dense1)
+dense2 = Dense(32, name='ys2')(drop1)
+drop2 = Dropout(0.3)(dense2)
+dense3 = Dense(16, name ='ys3')(drop2)
+drop3 = Dropout(0.2)(dense3)
+dense4 = Dense(16, name='ys4')(drop3)
+drop3 = Dropout(0.2)(dense4)
+output1 = Dense(1)(drop3)
+model = Model(inputs=input1, outputs=output1) 
 
 model.summary()
 
 # model.save("./_save/keras28/keras28_1_save_model.h5")   # 상대경로
-# model.save("c:/AI5/_save/keras28/keras28_1_save_model.h5")   # 절대경로
+# model.save("c:/AI5/_save/keras32/keras32_1_save_model.h5")   # 절대경로
 
 
 # 그 모델의 가장 성능이 좋은 지점을 저장한다.
@@ -85,9 +124,9 @@ print(date)
 print(type(date)) # <class 'str'>
 
 
-path = './_save/keras30_mcp/01_boston/'
+path ='./_save/keras32_mcp2/'
 filename = '{epoch:04d}-{val_loss:.4f}.hdf5'    # 1000-0.7777.hdf5    { } = dictionary, 키와 밸류  d는 정수, f는 소수
-filepath = "".join([path, 'k30_', date, '_', filename])      # 파일위치와 이름을 에포와 발로스로 나타내준다
+filepath = "".join([path, 'k32_', date, '_', filename])      # 파일위치와 이름을 에포와 발로스로 나타내준다
 # 생성 예 : ""./_save/keras29_mcp/k29_1000-0.7777.hdf5"
 ##################### MCP 세이브 파일명 만들기 끝 ###########################
 
@@ -117,17 +156,18 @@ print('로스 : ', loss)
 y_predict = model.predict(x_test)
 r2 = r2_score(y_test, y_predict)
 print("r2스코어 : ", r2)
-print('로스 : ', loss)
+print("걸린시간 : ", round(end - start , 2),"초")
 
-# ModelCheckpoint
-# 로스 :  8.478630065917969
-# r2스코어 :  0.9318442053653067
-# 걸린시간 :  2.54 초
 
-# 로스 :  11.00588607788086
-# r2스코어 :  0.9115287661927284
-# 걸린시간 :  2.33 초
+if(gpus):
+    print("쥐피유 돈다!!!")
+else:
+    print("쥐피유 없다! xxxxx")
 
-# 로스 :  7.002828121185303
-# r2스코어 :  0.9437074958331625
+print("걸린시간 : ", round(end - start , 2),"초")
 
+# 쥐피유 돈다!!!
+# 걸린시간 :  5.25 초
+
+# 쥐피유 없다! xxxxx
+# 걸린시간 :  2.4 초
