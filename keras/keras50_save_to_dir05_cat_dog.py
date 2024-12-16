@@ -1,0 +1,72 @@
+'''
+image 폴더꺼 수치화 (2만개)와 kaggle 폴더꺼 수치화 (2.5만개)를 합친다.
+증폭 5천개 추가 (이미지 총 5만개)
+만들고 kaggle에 제출
+'''
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import time
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, Input, MaxPooling2D, BatchNormalization
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.utils import to_categorical
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler, RobustScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, accuracy_score
+
+#1. 데이터
+np_path = 'C:\\ai5\\_data\\_save_npy\\keras43\\'
+x_train1 = np.load(np_path + 'keras43_01_80_x_train.npy')
+y_train1 = np.load(np_path + 'keras43_01_80_y_train.npy')
+xy_test = np.load(np_path + 'keras43_01_80_x_test.npy')
+
+path_np = 'C:\\ai5\\_data\\_save_npy\\keras45\\'
+x_train2 = np.load(path_np + 'keras45_09_80_x_train.npy')
+y_train2 = np.load(path_np + 'keras45_09_80_y_train.npy')
+
+path = 'C:\\ai5\\_data\\kaggle\\dogs-vs-cats-redux-kernels-edition\\'
+mission = pd.read_csv(path + "sample_submission.csv", index_col=0)
+
+print(x_train1.shape, y_train1.shape)   # (25000, 80, 80, 3) (25000,)
+print(x_train2.shape, y_train2.shape)   # (19997, 80, 80, 3) (19997,)
+print(xy_test.shape)                    # (12500, 80, 80, 3)
+
+x_train = np.concatenate((x_train1, x_train2))
+y_train = np.concatenate((y_train1, y_train2))
+print(x_train.shape, y_train.shape)     # (44997, 80, 80, 3) (44997,)
+
+train_datagen = ImageDataGenerator(
+    # rescale=1./255,           # 처음부터 0~1 사이의 스케일링한 데이터를 달라
+    horizontal_flip=True,       # 수평 뒤집기
+    vertical_flip=True,         # 수직 뒤집기
+    width_shift_range=0.2,      # 평행 이동, 10%만큼 옆으로 이동
+    # height_shift_range=0.1,   # 평행 이동 수직
+    rotation_range=15,          # 정해진 각도만큼 이미지 회전
+    # zoom_range=1.2,           # 축소 또는 확대
+    # shear_range=0.7,          # 좌표 하나를 고정시키고 다른 몇개의 좌표를 이동시키는 변환 (일그러짐)
+    fill_mode='nearest',        # 주변의 이미지의 비율대로 채운다
+)
+
+augment_size = 5003
+
+randidx = np.random.randint(x_train.shape[0], size=augment_size)
+# print(randidx)
+# print(np.min(randidx), np.max(randidx))
+print(x_train[0].shape)         # (80, 80, 3)
+
+x_augmented = x_train[randidx].copy()
+y_augmented = y_train[randidx].copy()
+print(x_augmented.shape, y_augmented.shape) # (5003, 80, 80, 3) (5003,)
+
+x_augmented = train_datagen.flow(
+    x_augmented, y_augmented,
+    batch_size=augment_size,
+    shuffle=False,
+    save_to_dir='C:\\ai5\\_data\\_save_img\\05_cat_dog\\'
+).next()[0]
+
+print(x_augmented.shape)    # (5003, 80, 80, 3)
